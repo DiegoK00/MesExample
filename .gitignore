@@ -51,7 +51,8 @@ logs/
 Thumbs.db   
 
  Api_e2e/
- Api_e2e/bin/*
+ Api_e2e/bin/
+ Api_e2e/obj/
  Api_e2e/node_modules/*
  Api_e2e/dist/*
  Api_e2e/build/*
@@ -87,3 +88,8 @@ mobile/pubspec.lock
 .DS_Store
 Thumbs.db
 .claude*
+
+#claude related
+.claude/    
+*claude*
+
