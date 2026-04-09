@@ -52,6 +52,26 @@ Thumbs.db
 
  Api_e2e/
  Api_e2e/bin/
+ Api_e2e/bin/debug/net10.0/
+ Api_e2e/bin/debug/net10.0/cs/
+ Api_e2e/bin/debug/net10.0/de/
+ Api_e2e/bin/debug/net10.0/es/
+ Api_e2e/bin/debug/net10.0/fr/
+ Api_e2e/bin/debug/net10.0/it/
+ Api_e2e/bin/debug/net10.0/ja/
+ Api_e2e/bin/debug/net10.0/ko/
+ Api_e2e/bin/debug/net10.0/pl/
+ Api_e2e/bin/debug/net10.0/pt-BR/
+ Api_e2e/bin/debug/net10.0/ru/
+ Api_e2e/bin/debug/net10.0/runtimes/
+ Api_e2e/bin/debug/net10.0/runtimes/unix/
+ Api_e2e/bin/debug/net10.0/runtimes/win/
+ Api_e2e/bin/debug/net10.0/runtimes/win-arm64/
+ Api_e2e/bin/debug/net10.0/runtimes/win-x86/
+ Api_e2e/bin/debug/net10.0/runtimes/win-x64/
+ Api_e2e/bin/debug/net10.0/tr/
+ Api_e2e/bin/debug/net10.0/zh-Hans/
+ Api_e2e/bin/debug/net10.0/zh-Hant/
  Api_e2e/obj/
  Api_e2e/node_modules/*
  Api_e2e/dist/*
