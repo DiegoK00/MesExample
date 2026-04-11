@@ -1,0 +1,1111 @@
+
+> web@0.0.0 e2e
+> playwright test --reporter=json
+
+{
+  "config": {
+    "configFile": "C:\\Personal\\Workspace\\MesClaude\\web\\playwright.config.ts",
+    "rootDir": "C:/Personal/Workspace/MesClaude/web/e2e",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Personal/Workspace/MesClaude/web/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Personal/Workspace/MesClaude/web/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.59.0",
+    "workers": 1,
+    "webServer": {
+      "command": "npx ng serve --port 4200",
+      "url": "http://localhost:4200",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "admin-audit-logs.spec.ts",
+      "file": "admin-audit-logs.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "audit_logs_page: mostra la tabella con colonne Azione/Entità/Data",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 9813,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('columnheader', { name: 'Azione' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('columnheader', { name: 'Azione' })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('columnheader', { name: 'Azione' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('columnheader', { name: 'Azione' })\u001b[22m\n\n    at C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-audit-logs.spec.ts:25:68",
+                    "location": {
+                      "file": "C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-audit-logs.spec.ts",
+                      "column": 68,
+                      "line": 25
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m\n \u001b[90m 24 |\u001b[39m   \u001b[90m// Intestazioni di colonna (da columns: ['timestamp', 'username', 'action', 'entity', 'ip', 'details'])\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 25 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'columnheader'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Azione'\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                    \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 26 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'columnheader'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Entità'\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m 27 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'columnheader'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Timestamp'\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m 28 |\u001b[39m\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-audit-logs.spec.ts",
+                        "column": 68,
+                        "line": 25
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('columnheader', { name: 'Azione' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('columnheader', { name: 'Azione' })\u001b[22m\n\n\n  23 |\n  24 |   // Intestazioni di colonna (da columns: ['timestamp', 'username', 'action', 'entity', 'ip', 'details'])\n> 25 |   await expect(page.getByRole('columnheader', { name: 'Azione' })).toBeVisible();\n     |                                                                    ^\n  26 |   await expect(page.getByRole('columnheader', { name: 'Entità' })).toBeVisible();\n  27 |   await expect(page.getByRole('columnheader', { name: 'Timestamp' })).toBeVisible();\n  28 |\n    at C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-audit-logs.spec.ts:25:68"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-01T07:28:01.039Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Personal\\Workspace\\MesClaude\\web\\test-results\\admin-audit-logs-audit-log-d3009--colonne-Azione-Entità-Data-chromium\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-audit-logs.spec.ts",
+                    "column": 68,
+                    "line": 25
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "4f21d990191dfe8a5502-91dd1e3f9b9fb2b03b75",
+          "file": "admin-audit-logs.spec.ts",
+          "line": 21,
+          "column": 5
+        },
+        {
+          "title": "audit_logs_filter: filtro per azione aggiorna la tabella",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 30040,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-audit-logs.spec.ts",
+                        "column": 35,
+                        "line": 59
+                      },
+                      "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Azione')\u001b[22m\n\n\n  57 |\n  58 |   // Seleziona un valore nel mat-select \"Azione\"\n> 59 |   await page.getByLabel('Azione').click();\n     |                                   ^\n  60 |\n  61 |   // Seleziona \"user.login\" dal pannello del select\n  62 |   await page.getByRole('option', { name: 'user.login' }).click();\n    at C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-audit-logs.spec.ts:59:35"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-01T07:28:14.382Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Personal\\Workspace\\MesClaude\\web\\test-results\\admin-audit-logs-audit-log-c71bc--azione-aggiorna-la-tabella-chromium\\error-context.md"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "4f21d990191dfe8a5502-09effcaea95c16af3362",
+          "file": "admin-audit-logs.spec.ts",
+          "line": 37,
+          "column": 5
+        },
+        {
+          "title": "audit_logs_pagination: navigazione pagine funziona",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 7069,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('mat-paginator')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('mat-paginator')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('mat-paginator')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('mat-paginator')\u001b[22m\n\n    at C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-audit-logs.spec.ts:96:27",
+                    "location": {
+                      "file": "C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-audit-logs.spec.ts",
+                      "column": 27,
+                      "line": 96
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 94 |\u001b[39m   \u001b[90m// Il paginator deve essere visibile e mostrare il totale\u001b[39m\n \u001b[90m 95 |\u001b[39m   \u001b[36mconst\u001b[39m paginator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'mat-paginator'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 96 |\u001b[39m   \u001b[36mawait\u001b[39m expect(paginator)\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 97 |\u001b[39m   \u001b[36mawait\u001b[39m expect(paginator)\u001b[33m.\u001b[39mtoContainText(\u001b[32m'60'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 98 |\u001b[39m\n \u001b[90m 99 |\u001b[39m   \u001b[90m// Clicca \"Pagina successiva\"\u001b[39m\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-audit-logs.spec.ts",
+                        "column": 27,
+                        "line": 96
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('mat-paginator')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('mat-paginator')\u001b[22m\n\n\n  94 |   // Il paginator deve essere visibile e mostrare il totale\n  95 |   const paginator = page.locator('mat-paginator');\n> 96 |   await expect(paginator).toBeVisible();\n     |                           ^\n  97 |   await expect(paginator).toContainText('60');\n  98 |\n  99 |   // Clicca \"Pagina successiva\"\n    at C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-audit-logs.spec.ts:96:27"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-01T07:28:47.090Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Personal\\Workspace\\MesClaude\\web\\test-results\\admin-audit-logs-audit-log-7f879-navigazione-pagine-funziona-chromium\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-audit-logs.spec.ts",
+                    "column": 27,
+                    "line": 96
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "4f21d990191dfe8a5502-ddeef1f460c812624111",
+          "file": "admin-audit-logs.spec.ts",
+          "line": 72,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "admin-programs.spec.ts",
+      "file": "admin-programs.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "programs_page: mostra la tabella programmi",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 7071,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('columnheader', { name: 'Codice' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('columnheader', { name: 'Codice' })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('columnheader', { name: 'Codice' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('columnheader', { name: 'Codice' })\u001b[22m\n\n    at C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-programs.spec.ts:25:68",
+                    "location": {
+                      "file": "C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-programs.spec.ts",
+                      "column": 68,
+                      "line": 25
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m\n \u001b[90m 24 |\u001b[39m   \u001b[90m// Intestazioni di colonna\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 25 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'columnheader'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Codice'\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                    \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 26 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'columnheader'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Nome'\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m 27 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'columnheader'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Stato'\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m 28 |\u001b[39m\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-programs.spec.ts",
+                        "column": 68,
+                        "line": 25
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('columnheader', { name: 'Codice' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('columnheader', { name: 'Codice' })\u001b[22m\n\n\n  23 |\n  24 |   // Intestazioni di colonna\n> 25 |   await expect(page.getByRole('columnheader', { name: 'Codice' })).toBeVisible();\n     |                                                                    ^\n  26 |   await expect(page.getByRole('columnheader', { name: 'Nome' })).toBeVisible();\n  27 |   await expect(page.getByRole('columnheader', { name: 'Stato' })).toBeVisible();\n  28 |\n    at C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-programs.spec.ts:25:68"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-01T07:28:56.737Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Personal\\Workspace\\MesClaude\\web\\test-results\\admin-programs-programs-page-mostra-la-tabella-programmi-chromium\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-programs.spec.ts",
+                    "column": 68,
+                    "line": 25
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "cad8855ed541740ea874-cd7462eb2a6cae237803",
+          "file": "admin-programs.spec.ts",
+          "line": 21,
+          "column": 5
+        },
+        {
+          "title": "programs_create: dialog di creazione — codice viene forzato in uppercase",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 30026,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-programs.spec.ts",
+                        "column": 63,
+                        "line": 41
+                      },
+                      "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Nuovo Programma' })\u001b[22m\n\n\n  39 |\n  40 |   // Apre il dialog \"Nuovo Programma\"\n> 41 |   await page.getByRole('button', { name: 'Nuovo Programma' }).click();\n     |                                                               ^\n  42 |   await expect(page.getByRole('heading', { name: 'Nuovo Programma' })).toBeVisible();\n  43 |\n  44 |   // Digita in minuscolo nel campo Codice\n    at C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-programs.spec.ts:41:63"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-01T07:29:06.761Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Personal\\Workspace\\MesClaude\\web\\test-results\\admin-programs-programs-cr-37439--viene-forzato-in-uppercase-chromium\\error-context.md"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "cad8855ed541740ea874-2d330559404b0d7771fe",
+          "file": "admin-programs.spec.ts",
+          "line": 37,
+          "column": 5
+        },
+        {
+          "title": "programs_filter: toggle \"solo attivi\" filtra la lista",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 30035,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-programs.spec.ts",
+                        "column": 16,
+                        "line": 81
+                      },
+                      "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('switch', { name: 'Solo attivi' })\u001b[22m\n\n\n  79 |   // mat-slide-toggle renders a button with role=\"switch\"\n  80 |   const toggle = page.getByRole('switch', { name: 'Solo attivi' });\n> 81 |   await toggle.click();\n     |                ^\n  82 |   await page.waitForLoadState('networkidle');\n  83 |\n  84 |   // L'URL deve contenere activeOnly=true\n    at C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-programs.spec.ts:81:16"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-01T07:29:39.348Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Personal\\Workspace\\MesClaude\\web\\test-results\\admin-programs-programs-fi-80be4-solo-attivi-filtra-la-lista-chromium\\error-context.md"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "cad8855ed541740ea874-952e54bf9e68cc6f5c5d",
+          "file": "admin-programs.spec.ts",
+          "line": 61,
+          "column": 5
+        },
+        {
+          "title": "programs_delete: click elimina su un programma chiama DELETE",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 30044,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-programs.spec.ts",
+                        "column": 63,
+                        "line": 120
+                      },
+                      "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Elimina' }).first()\u001b[22m\n\n\n  118 |\n  119 |   // Clicca il primo pulsante \"Elimina\"\n> 120 |   await page.getByRole('button', { name: 'Elimina' }).first().click();\n      |                                                               ^\n  121 |   await page.waitForLoadState('networkidle');\n  122 |\n  123 |   expect(deleteCalled).toBe(true);\n    at C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-programs.spec.ts:120:63"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-01T07:30:11.959Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Personal\\Workspace\\MesClaude\\web\\test-results\\admin-programs-programs-de-f9b27--un-programma-chiama-DELETE-chromium\\error-context.md"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "cad8855ed541740ea874-02cfc3e5fa3975d6aac6",
+          "file": "admin-programs.spec.ts",
+          "line": 91,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "admin-users.spec.ts",
+      "file": "admin-users.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "users_page: mostra la tabella con colonne Email/Username/Stato",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 7134,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('columnheader', { name: 'Email' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('columnheader', { name: 'Email' })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('columnheader', { name: 'Email' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('columnheader', { name: 'Email' })\u001b[22m\n\n    at C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-users.spec.ts:25:67",
+                    "location": {
+                      "file": "C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-users.spec.ts",
+                      "column": 67,
+                      "line": 25
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m\n \u001b[90m 24 |\u001b[39m   \u001b[90m// Verifica le intestazioni di colonna\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 25 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'columnheader'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Email'\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 26 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'columnheader'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Username'\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m 27 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'columnheader'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Stato'\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m 28 |\u001b[39m\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-users.spec.ts",
+                        "column": 67,
+                        "line": 25
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('columnheader', { name: 'Email' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('columnheader', { name: 'Email' })\u001b[22m\n\n\n  23 |\n  24 |   // Verifica le intestazioni di colonna\n> 25 |   await expect(page.getByRole('columnheader', { name: 'Email' })).toBeVisible();\n     |                                                                   ^\n  26 |   await expect(page.getByRole('columnheader', { name: 'Username' })).toBeVisible();\n  27 |   await expect(page.getByRole('columnheader', { name: 'Stato' })).toBeVisible();\n  28 |\n    at C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-users.spec.ts:25:67"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-01T07:30:45.002Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Personal\\Workspace\\MesClaude\\web\\test-results\\admin-users-users-page-mos-550ea-olonne-Email-Username-Stato-chromium\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-users.spec.ts",
+                    "column": 67,
+                    "line": 25
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "9d69cbef181f9ad01509-07a6e88a7fe062459718",
+          "file": "admin-users.spec.ts",
+          "line": 21,
+          "column": 5
+        },
+        {
+          "title": "users_page: mostra paginazione con totalCount",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 7208,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('mat-paginator')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('mat-paginator')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('mat-paginator')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('mat-paginator')\u001b[22m\n\n    at C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-users.spec.ts:42:27",
+                    "location": {
+                      "file": "C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-users.spec.ts",
+                      "column": 27,
+                      "line": 42
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 40 |\u001b[39m   \u001b[90m// mat-paginator mostra \"1 – 2 of 2\" o simile a seconda del locale\u001b[39m\n \u001b[90m 41 |\u001b[39m   \u001b[36mconst\u001b[39m paginator \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'mat-paginator'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 42 |\u001b[39m   \u001b[36mawait\u001b[39m expect(paginator)\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 43 |\u001b[39m\n \u001b[90m 44 |\u001b[39m   \u001b[90m// Verifica che ci siano 2 risultati (totalCount: 2 dai mock)\u001b[39m\n \u001b[90m 45 |\u001b[39m   \u001b[36mawait\u001b[39m expect(paginator)\u001b[33m.\u001b[39mtoContainText(\u001b[32m'2'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-users.spec.ts",
+                        "column": 27,
+                        "line": 42
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('mat-paginator')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('mat-paginator')\u001b[22m\n\n\n  40 |   // mat-paginator mostra \"1 – 2 of 2\" o simile a seconda del locale\n  41 |   const paginator = page.locator('mat-paginator');\n> 42 |   await expect(paginator).toBeVisible();\n     |                           ^\n  43 |\n  44 |   // Verifica che ci siano 2 risultati (totalCount: 2 dai mock)\n  45 |   await expect(paginator).toContainText('2');\n    at C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-users.spec.ts:42:27"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-01T07:30:55.048Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Personal\\Workspace\\MesClaude\\web\\test-results\\admin-users-users-page-mostra-paginazione-con-totalCount-chromium\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-users.spec.ts",
+                    "column": 27,
+                    "line": 42
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "9d69cbef181f9ad01509-6fdc0a9aa0f0b6f79c77",
+          "file": "admin-users.spec.ts",
+          "line": 37,
+          "column": 5
+        },
+        {
+          "title": "users_search: inserendo testo nel campo ricerca filtra la lista",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 30049,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-users.spec.ts",
+                        "column": 43,
+                        "line": 68
+                      },
+                      "message": "Error: locator.fill: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByPlaceholder('Cerca...')\u001b[22m\n\n\n  66 |\n  67 |   // Inserisce testo nel campo cerca e preme Cerca\n> 68 |   await page.getByPlaceholder('Cerca...').fill('admin');\n     |                                           ^\n  69 |   await page.getByRole('button', { name: 'Cerca' }).click();\n  70 |   await page.waitForLoadState('networkidle');\n  71 |\n    at C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-users.spec.ts:68:43"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-01T07:31:04.961Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Personal\\Workspace\\MesClaude\\web\\test-results\\admin-users-users-search-i-86ebb-mpo-ricerca-filtra-la-lista-chromium\\error-context.md"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "9d69cbef181f9ad01509-c468df3cdb6a6b8c3e24",
+          "file": "admin-users.spec.ts",
+          "line": 51,
+          "column": 5
+        },
+        {
+          "title": "users_create: aprendo il dialog di creazione mostra i campi obbligatori",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 10,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 30055,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-users.spec.ts",
+                        "column": 60,
+                        "line": 83
+                      },
+                      "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Nuovo Utente' })\u001b[22m\n\n\n  81 |\n  82 |   // Clicca \"Nuovo Utente\"\n> 83 |   await page.getByRole('button', { name: 'Nuovo Utente' }).click();\n     |                                                            ^\n  84 |\n  85 |   // Il dialog deve aprirsi con titolo \"Nuovo Utente\"\n  86 |   await expect(page.getByRole('heading', { name: 'Nuovo Utente' })).toBeVisible();\n    at C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-users.spec.ts:83:60"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-01T07:31:38.107Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Personal\\Workspace\\MesClaude\\web\\test-results\\admin-users-users-create-a-3294c--mostra-i-campi-obbligatori-chromium\\error-context.md"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "9d69cbef181f9ad01509-35aa96961a822af7e8b4",
+          "file": "admin-users.spec.ts",
+          "line": 79,
+          "column": 5
+        },
+        {
+          "title": "users_deactivate: click su disattiva chiama DELETE sulla riga",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 11,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 30067,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-users.spec.ts",
+                        "column": 65,
+                        "line": 129
+                      },
+                      "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Disattiva' }).first()\u001b[22m\n\n\n  127 |\n  128 |   // Clicca il bottone \"Disattiva\" (person_off) sulla prima riga\n> 129 |   await page.getByRole('button', { name: 'Disattiva' }).first().click();\n      |                                                                 ^\n  130 |   await page.waitForLoadState('networkidle');\n  131 |\n  132 |   expect(deactivateCalled).toBe(true);\n    at C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\admin-users.spec.ts:129:65"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-01T07:32:11.428Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Personal\\Workspace\\MesClaude\\web\\test-results\\admin-users-users-deactiva-aa50f-va-chiama-DELETE-sulla-riga-chromium\\error-context.md"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "9d69cbef181f9ad01509-20f9a95442d48e2f71dc",
+          "file": "admin-users.spec.ts",
+          "line": 100,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "auth.spec.ts",
+      "file": "auth.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "redirect: la root / redirige a /admin/login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 12,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1307,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-01T07:32:44.536Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d748ac400d08b85935ef-1654a65a2ca9d2b9218e",
+          "file": "auth.spec.ts",
+          "line": 12,
+          "column": 5
+        },
+        {
+          "title": "login_page: mostra il form con campi email e password",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 12,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1184,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-01T07:32:46.827Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d748ac400d08b85935ef-a6d6bfafd6d9408e2b54",
+          "file": "auth.spec.ts",
+          "line": 21,
+          "column": 5
+        },
+        {
+          "title": "login_page: mostra titolo \"Accesso Backoffice\" per /admin/login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 12,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1165,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-01T07:32:48.047Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d748ac400d08b85935ef-083f029d9fc55a34244f",
+          "file": "auth.spec.ts",
+          "line": 33,
+          "column": 5
+        },
+        {
+          "title": "validazione: email vuota mostra errore \"Email obbligatoria\"",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 12,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1292,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-01T07:32:49.243Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d748ac400d08b85935ef-80a8dba791560f6d13e0",
+          "file": "auth.spec.ts",
+          "line": 43,
+          "column": 5
+        },
+        {
+          "title": "validazione: password vuota mostra errore \"Password obbligatoria\"",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 12,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1485,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-01T07:32:50.562Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d748ac400d08b85935ef-07f0eb4043d8af98c5cb",
+          "file": "auth.spec.ts",
+          "line": 60,
+          "column": 5
+        },
+        {
+          "title": "login_fallito: credenziali errate mostrano messaggio di errore",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 12,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2657,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-01T07:32:52.070Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d748ac400d08b85935ef-76dcfbb076785a395e97",
+          "file": "auth.spec.ts",
+          "line": 79,
+          "column": 5
+        },
+        {
+          "title": "login_ok: credenziali valide redirect a /admin/",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 12,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1289,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-01T07:32:54.757Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d748ac400d08b85935ef-444da06d5924e65df435",
+          "file": "auth.spec.ts",
+          "line": 98,
+          "column": 5
+        },
+        {
+          "title": "logout: click su logout torna a /admin/login",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 12,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 30049,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\auth.spec.ts",
+                        "column": 52,
+                        "line": 149
+                      },
+                      "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Menu' })\u001b[22m\n\n\n  147 |\n  148 |   // Apre sidenav cliccando il pulsante menu nella toolbar\n> 149 |   await page.getByRole('button', { name: 'Menu' }).click();\n      |                                                    ^\n  150 |\n  151 |   // Clicca \"Esci\" nel sidenav\n  152 |   await page.getByRole('link', { name: 'Esci' }).click();\n    at C:\\Personal\\Workspace\\MesClaude\\web\\e2e\\auth.spec.ts:149:52"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-01T07:32:56.071Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Personal\\Workspace\\MesClaude\\web\\test-results\\auth-logout-click-su-logout-torna-a-admin-login-chromium\\error-context.md"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "d748ac400d08b85935ef-19f1bf346edec3abfe56",
+          "file": "auth.spec.ts",
+          "line": 125,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-04-01T07:27:43.777Z",
+    "duration": 342858.27099999995,
+    "expected": 7,
+    "skipped": 0,
+    "unexpected": 13,
+    "flaky": 0
+  }
+}
