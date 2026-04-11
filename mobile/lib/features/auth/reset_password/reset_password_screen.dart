@@ -44,7 +44,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   }
 
   String get _loginRoute => widget.area == 1 ? '/admin-login' : '/login';
-  String get _forgotRoute => widget.area == 1 ? '/forgot-password/1' : '/forgot-password/2';
+ // String get _forgotRoute => widget.area == 1 ? '/forgot-password/1' : '/forgot-password/2';
 
   @override
   Widget build(BuildContext context) {

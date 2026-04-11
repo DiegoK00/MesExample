@@ -35,7 +35,7 @@ class _FakeAuthService extends AuthService {
 }
 
 Widget _buildApp(_FakeAuthService auth, {int area = 2}) {
-  final backRoute = area == 1 ? '/admin' : '/home';
+//  final backRoute = area == 1 ? '/admin' : '/home';
   final router = GoRouter(
     initialLocation: '/change-password',
     routes: [
