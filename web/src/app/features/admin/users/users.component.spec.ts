@@ -15,8 +15,8 @@ describe('UsersComponent', () => {
 
   const mockData: UsersPageResponse = {
     items: [
-      { id: 1, email: 'mario@test.com', username: 'mario', loginArea: 1, roles: ['Admin'], isActive: true },
-      { id: 2, email: 'luigi@test.com', username: 'luigi', loginArea: 2, roles: ['User'], isActive: false }
+      { id: 1, email: 'mario@test.com', username: 'mario', loginArea: 1, roles: ['Admin'], isActive: true, createdAt: '2026-01-01T10:00:00', lastLoginAt: '2026-04-10T15:30:00' },
+      { id: 2, email: 'luigi@test.com', username: 'luigi', loginArea: 2, roles: ['User'], isActive: false, createdAt: '2026-02-01T10:00:00', lastLoginAt: null }
     ],
     totalCount: 2,
     page: 1,

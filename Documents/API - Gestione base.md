@@ -5,7 +5,7 @@
 | Tabella | Descrizione |
 |---------|-------------|
 | `Users` | Anagrafica utenti con supporto a 2 aree di login (Admin / App) |
-| `Roles` | Ruoli di sistema: SuperAdmin, Admin, User |
+| `Roles` | Ruoli di sistema: SuperAdmin, Admin, Configurator, User |
 | `UserRoles` | Associazione M:N tra Users e Roles |
 | `Programs` | Programmi/moduli applicativi accessibili agli utenti |
 | `UserPrograms` | Associazione M:N tra Users e Programs con tracciabilità (GrantedBy) |
@@ -38,6 +38,7 @@ Alla prima migrazione vengono inseriti automaticamente i ruoli base:
 | 1 | SuperAdmin | Full system access |
 | 2 | Admin | Administrative access |
 | 3 | User | Standard user access |
+| 4 | Configurator | Can create, update and delete configuration data (categories, measure units) |
 
 ---
 

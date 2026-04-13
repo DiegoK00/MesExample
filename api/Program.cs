@@ -106,6 +106,10 @@ builder.Services.AddScoped<AuditLogService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ProgramService>();
+builder.Services.AddScoped<CategoryService>();
+builder.Services.AddScoped<MeasureUnitService>();
+builder.Services.AddScoped<ArticleService>();
+builder.Services.AddScoped<BillOfMaterialService>();
 
 // Controllers
 builder.Services.AddControllers();

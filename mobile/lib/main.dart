@@ -7,6 +7,9 @@ import 'core/services/preferences_service.dart';
 import 'core/services/users_service.dart';
 import 'core/services/programs_service.dart';
 import 'core/services/audit_logs_service.dart';
+import 'core/services/categories_service.dart';
+import 'core/services/measure_units_service.dart';
+import 'core/services/articles_service.dart';
 import 'features/auth/login/login_screen.dart';
 import 'features/auth/forgot_password/forgot_password_screen.dart';
 import 'features/auth/reset_password/reset_password_screen.dart';
@@ -17,6 +20,9 @@ import 'features/admin/admin_home_screen.dart';
 import 'features/admin/users/admin_users_screen.dart';
 import 'features/admin/programs/admin_programs_screen.dart';
 import 'features/admin/audit_logs/admin_audit_logs_screen.dart';
+import 'features/admin/categories/admin_categories_screen.dart';
+import 'features/admin/measure_units/admin_measure_units_screen.dart';
+import 'features/admin/articles/admin_articles_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,6 +53,9 @@ class _MyAppState extends State<MyApp> {
   late final UsersService _usersService;
   late final ProgramsService _programsService;
   late final AuditLogsService _auditLogsService;
+  late final CategoriesService _categoriesService;
+  late final MeasureUnitsService _measureUnitsService;
+  late final ArticlesService _articlesService;
   final _messengerKey = GlobalKey<ScaffoldMessengerState>();
 
   @override
@@ -55,6 +64,9 @@ class _MyAppState extends State<MyApp> {
     _usersService = UsersService(widget.auth);
     _programsService = ProgramsService(widget.auth);
     _auditLogsService = AuditLogsService(widget.auth);
+    _categoriesService = CategoriesService(widget.auth);
+    _measureUnitsService = MeasureUnitsService(widget.auth);
+    _articlesService = ArticlesService(widget.auth);
 
     // Rebuild when theme changes so MaterialApp.router gets the new themeMode.
     widget.prefs.addListener(() => setState(() {}));
@@ -70,40 +82,52 @@ class _MyAppState extends State<MyApp> {
         // ── Area App (area = 2) ────────────────────────────────────────────
         GoRoute(
           path: '/login',
-          builder: (_, __) => const LoginScreen(area: 2),
+          builder: (_, _) => const LoginScreen(area: 2),
         ),
         GoRoute(
           path: '/home',
-          builder: (_, __) => const HomeScreen(),
+          builder: (_, _) => const HomeScreen(),
         ),
         GoRoute(
           path: '/programs',
-          builder: (_, __) => const ProgramsScreen(),
+          builder: (_, _) => const ProgramsScreen(),
         ),
         // ── Area Admin (area = 1) ──────────────────────────────────────────
         GoRoute(
           path: '/admin-login',
-          builder: (_, __) => const LoginScreen(area: 1),
+          builder: (_, _) => const LoginScreen(area: 1),
         ),
         GoRoute(
           path: '/admin',
-          builder: (_, __) => const AdminHomeScreen(),
+          builder: (_, _) => const AdminHomeScreen(),
         ),
         GoRoute(
           path: '/admin/users',
-          builder: (_, __) => const AdminUsersScreen(),
+          builder: (_, _) => const AdminUsersScreen(),
         ),
         GoRoute(
           path: '/admin/programs',
-          builder: (_, __) => const AdminProgramsScreen(),
+          builder: (_, _) => const AdminProgramsScreen(),
+        ),
+        GoRoute(
+          path: '/admin/categories',
+          builder: (_, _) => const AdminCategoriesScreen(),
+        ),
+        GoRoute(
+          path: '/admin/measure-units',
+          builder: (_, _) => const AdminMeasureUnitsScreen(),
+        ),
+        GoRoute(
+          path: '/admin/articles',
+          builder: (_, _) => const AdminArticlesScreen(),
         ),
         GoRoute(
           path: '/admin/audit-logs',
-          builder: (_, __) => const AdminAuditLogsScreen(),
+          builder: (_, _) => const AdminAuditLogsScreen(),
         ),
         GoRoute(
           path: '/change-password',
-          builder: (_, __) => const ChangePasswordScreen(),
+          builder: (_, _) => const ChangePasswordScreen(),
         ),
         // ── Password reset (area-agnostic) ────────────────────────────────
         GoRoute(
@@ -195,6 +219,9 @@ class _MyAppState extends State<MyApp> {
         Provider.value(value: _usersService),
         Provider.value(value: _programsService),
         Provider.value(value: _auditLogsService),
+        Provider.value(value: _categoriesService),
+        Provider.value(value: _measureUnitsService),
+        Provider.value(value: _articlesService),
       ],
       child: MaterialApp.router(
         title: 'MesClaude',

@@ -27,7 +27,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _loading = true);
 
-    await context.read<AuthService>().forgotPassword(_emailCtrl.text.trim(), widget.area);
+    try {
+      await context.read<AuthService>().forgotPassword(_emailCtrl.text.trim(), widget.area);
+    } catch (e) {
+      // Anti-enumeration: non riveliamo se l'email esiste o no
+      // Mostriamo sempre il messaggio di successo
+    }
 
     if (mounted) setState(() { _loading = false; _sent = true; });
   }

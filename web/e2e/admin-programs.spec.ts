@@ -117,8 +117,8 @@ test('programs_delete: click elimina su un programma chiama DELETE', async ({ pa
   // Accetta il dialog di conferma (window.confirm)
   page.on('dialog', dialog => dialog.accept());
 
-  // Clicca il primo pulsante "Elimina"
-  await page.getByRole('button', { name: 'Elimina' }).first().click();
+  // Clicca il primo pulsante delete (mat-icon-button con matTooltip="Elimina")
+  await page.locator('button:has-text("delete")').first().click();
   await page.waitForLoadState('networkidle');
 
   expect(deleteCalled).toBe(true);

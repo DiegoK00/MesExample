@@ -40,7 +40,7 @@ import { ChangePasswordComponent } from '../../auth/change-password/change-passw
           </span>
           <span class="spacer"></span>
           <span class="user-info">{{ authService.currentUser()?.username }}</span>
-          <button mat-icon-button (click)="sidenav.toggle()" matTooltip="Menu">
+          <button mat-icon-button (click)="sidenav.toggle()" aria-label="Menu" matTooltip="Menu">
             <mat-icon>menu</mat-icon>
           </button>
         </mat-toolbar>

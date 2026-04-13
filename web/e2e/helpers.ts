@@ -14,7 +14,7 @@ export const MOCK_USER_ADMIN = {
   username: 'admin',
   loginArea: 1,
   roles: ['SuperAdmin'],
-  programs: [],
+  programs: [] as string[],
   isActive: true,
 };
 
@@ -24,17 +24,7 @@ export const MOCK_USER_APP = {
   username: 'user',
   loginArea: 2,
   roles: ['User'],
-  programs: ['PROG_A'],
-  isActive: true,
-};
-
-export const MOCK_USER_APP = {
-  id: 2,
-  email: 'user@test.com',
-  username: 'user',
-  loginArea: 2,
-  roles: ['User'],
-  programs: ['PROG_A'],
+  programs: ['PROG_A'] as string[],
   isActive: true,
 };
 

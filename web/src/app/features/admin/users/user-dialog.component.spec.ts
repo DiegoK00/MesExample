@@ -15,7 +15,9 @@ describe('UserDialogComponent', () => {
     username: 'mario',
     loginArea: 1 as const,
     roles: ['Admin'],
-    isActive: true
+    isActive: true,
+    createdAt: '2026-01-01T10:00:00',
+    lastLoginAt: '2026-04-10T15:30:00'
   };
 
   function createFixture(dialogData: any): ComponentFixture<UserDialogComponent> {

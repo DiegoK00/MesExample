@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile/core/models/auth_models.dart';
 import 'package:mobile/core/services/auth_service.dart';
+import 'package:mobile/core/services/preferences_service.dart';
 import 'package:mobile/features/admin/admin_home_screen.dart';
 
 // ---------------------------------------------------------------------------
@@ -45,8 +46,11 @@ Widget _buildApp(_FakeAdminAuthService auth, {String initialLocation = '/admin'}
     ],
   );
 
-  return ChangeNotifierProvider<AuthService>.value(
-    value: auth,
+  return MultiProvider(
+    providers: [
+      ChangeNotifierProvider<AuthService>.value(value: auth),
+      ChangeNotifierProvider<PreferencesService>(create: (_) => PreferencesService()),
+    ],
     child: MaterialApp.router(routerConfig: router),
   );
 }

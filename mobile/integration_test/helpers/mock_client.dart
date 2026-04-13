@@ -45,6 +45,59 @@ final _auditLogs = {
   'pageSize': 50,
 };
 
+final _categories = [
+  {'id': 1, 'name': 'Abbigliamento', 'description': null},
+  {'id': 2, 'name': 'Accessori', 'description': null},
+];
+
+final _measureUnits = [
+  {'id': 1, 'name': 'Pezzo', 'description': null},
+  {'id': 2, 'name': 'Metro', 'description': null},
+];
+
+final _articles = [
+  {
+    'id': 1,
+    'code': 'ART001',
+    'name': 'T-Shirt Bianca',
+    'description': 'Maglietta classica',
+    'categoryId': 1,
+    'categoryName': 'Abbigliamento',
+    'price': 19.90,
+    'umId': 1,
+    'umName': 'Pezzo',
+    'um2Id': null,
+    'um2Name': null,
+    'measures': 'S / M / L / XL',
+    'composition': null,
+    'isActive': true,
+    'createdAt': '2026-01-01T00:00:00Z',
+    'createdByUsername': 'admin',
+    'deletedAt': null,
+    'deletedByUsername': null,
+  },
+  {
+    'id': 2,
+    'code': 'ART002',
+    'name': 'Cintura Pelle',
+    'description': null,
+    'categoryId': 2,
+    'categoryName': 'Accessori',
+    'price': 45.00,
+    'umId': 1,
+    'umName': 'Pezzo',
+    'um2Id': null,
+    'um2Name': null,
+    'measures': null,
+    'composition': null,
+    'isActive': false,
+    'createdAt': '2026-01-02T00:00:00Z',
+    'createdByUsername': 'admin',
+    'deletedAt': null,
+    'deletedByUsername': null,
+  },
+];
+
 // ── Factory ───────────────────────────────────────────────────────────────────
 
 /// Crea un [MockClient] che risponde a tutti gli endpoint usati dall'app.
@@ -124,6 +177,30 @@ MockClient buildMockClient() {
     if (path.contains('/audit-logs')) {
       return http.Response(
         jsonEncode(_auditLogs),
+        200,
+        headers: {'content-type': 'application/json'},
+      );
+    }
+
+    if (path.contains('/articles')) {
+      return http.Response(
+        jsonEncode(_articles),
+        200,
+        headers: {'content-type': 'application/json'},
+      );
+    }
+
+    if (path.contains('/categories')) {
+      return http.Response(
+        jsonEncode(_categories),
+        200,
+        headers: {'content-type': 'application/json'},
+      );
+    }
+
+    if (path.contains('/measure-units')) {
+      return http.Response(
+        jsonEncode(_measureUnits),
         200,
         headers: {'content-type': 'application/json'},
       );

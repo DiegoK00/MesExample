@@ -20,4 +20,7 @@ class ApiConstants {
   static const String users = '$baseUrl/users';
   static const String programs = '$baseUrl/programs';
   static const String auditLogs = '$baseUrl/audit-logs';
+  static const String categories = '$baseUrl/categories';
+  static const String measureUnits = '$baseUrl/measure-units';
+  static const String articles = '$baseUrl/articles';
 }

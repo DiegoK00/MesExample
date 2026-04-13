@@ -16,7 +16,7 @@ test('app_login: mostra titolo "MesClaude"', async ({ page }) => {
   await page.goto('/app/login');
   await page.waitForLoadState('networkidle');
 
-  await expect(page.getByText('MesClaude')).toBeVisible();
+  await expect(page.getByText('Accesso Applicazione')).toBeVisible();
   await expect(page.getByLabel('Email')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Accedi' })).toBeVisible();
 });
@@ -55,7 +55,7 @@ test('app_dashboard: mostra email e ruolo dell\'utente', async ({ page }) => {
   await loginAsAppUser(page);
 
   await expect(page.getByText('user@test.com')).toBeVisible();
-  await expect(page.getByText('User')).toBeVisible();
+  await expect(page.getByText('User', { exact: true })).toBeVisible();
 });
 
 // ---------------------------------------------------------------------------
@@ -64,7 +64,7 @@ test('app_dashboard: mostra email e ruolo dell\'utente', async ({ page }) => {
 test('app_dashboard: mostra i programmi assegnati', async ({ page }) => {
   await loginAsAppUser(page);
 
-  await expect(page.getByText('PROG_A')).toBeVisible();
+  await expect(page.getByText('PROG_A', { exact: true })).toBeVisible();
 });
 
 // ---------------------------------------------------------------------------
@@ -80,7 +80,7 @@ test('app_sidenav: mostra username e programmi assegnati nel sidenav', async ({ 
   await expect(page.getByText('user').first()).toBeVisible();
 
   // Programma assegnato nel sidenav
-  await expect(page.getByText('PROG_A')).toBeVisible();
+  await expect(page.getByText('PROG_A').first()).toBeVisible();
 });
 
 // ---------------------------------------------------------------------------

@@ -58,6 +58,81 @@ namespace Api.Migrations
                     b.ToTable("Programs", (string)null);
                 });
 
+            modelBuilder.Entity("Api.Models.Article", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Composition")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CreatedFrom")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeletedFrom")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Measures")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("UM2Id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UMId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.HasIndex("CreatedFrom");
+
+                    b.HasIndex("DeletedFrom");
+
+                    b.HasIndex("UM2Id");
+
+                    b.HasIndex("UMId");
+
+                    b.ToTable("Articles", (string)null);
+                });
+
             modelBuilder.Entity("Api.Models.AuditLog", b =>
                 {
                     b.Property<long>("Id")
@@ -102,6 +177,56 @@ namespace Api.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("AuditLogs");
+                });
+
+            modelBuilder.Entity("Api.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Categories", (string)null);
+                });
+
+            modelBuilder.Entity("Api.Models.MeasureUnit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("MeasureUnits", (string)null);
                 });
 
             modelBuilder.Entity("Api.Models.PasswordResetToken", b =>
@@ -220,6 +345,12 @@ namespace Api.Migrations
                             Id = 3,
                             Description = "Standard user access",
                             Name = "User"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "Can create, update and delete configuration data (categories, measure units)",
+                            Name = "Configurator"
                         });
                 });
 
@@ -313,6 +444,47 @@ namespace Api.Migrations
                     b.ToTable("UserRoles");
                 });
 
+            modelBuilder.Entity("Api.Models.Article", b =>
+                {
+                    b.HasOne("Api.Models.Category", "Category")
+                        .WithMany("Articles")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Api.Models.User", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedFrom")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Api.Models.User", "DeletedByUser")
+                        .WithMany()
+                        .HasForeignKey("DeletedFrom")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Api.Models.MeasureUnit", "UM2")
+                        .WithMany("ArticlesUM2")
+                        .HasForeignKey("UM2Id")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Api.Models.MeasureUnit", "UM")
+                        .WithMany("ArticlesUM")
+                        .HasForeignKey("UMId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("DeletedByUser");
+
+                    b.Navigation("UM");
+
+                    b.Navigation("UM2");
+                });
+
             modelBuilder.Entity("Api.Models.AuditLog", b =>
                 {
                     b.HasOne("Api.Models.User", "User")
@@ -393,6 +565,18 @@ namespace Api.Migrations
             modelBuilder.Entity("Api.Models.AppProgram", b =>
                 {
                     b.Navigation("UserPrograms");
+                });
+
+            modelBuilder.Entity("Api.Models.Category", b =>
+                {
+                    b.Navigation("Articles");
+                });
+
+            modelBuilder.Entity("Api.Models.MeasureUnit", b =>
+                {
+                    b.Navigation("ArticlesUM");
+
+                    b.Navigation("ArticlesUM2");
                 });
 
             modelBuilder.Entity("Api.Models.Role", b =>

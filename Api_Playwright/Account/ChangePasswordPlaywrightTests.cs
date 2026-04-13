@@ -55,7 +55,7 @@ public class ChangePasswordPlaywrightTests : IClassFixture<PlaywrightApiFixture>
         Assert.Equal(400, response.Status);
 
         var contentType = response.Headers["content-type"];
-        Assert.Contains("application/json", contentType);
+        Assert.Contains("json", contentType); // accetta application/json e application/problem+json
 
         var text = await response.TextAsync();
         using var doc = JsonDocument.Parse(text);

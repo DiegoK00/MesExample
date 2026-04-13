@@ -86,10 +86,11 @@ test('users_create: aprendo il dialog di creazione mostra i campi obbligatori', 
   // Il dialog deve aprirsi con titolo "Nuovo Utente"
   await expect(page.getByRole('heading', { name: 'Nuovo Utente' })).toBeVisible();
 
-  // Campi obbligatori presenti nel dialog
-  await expect(page.getByLabel('Email')).toBeVisible();
-  await expect(page.getByLabel('Username')).toBeVisible();
-  await expect(page.getByLabel('Password')).toBeVisible();
+  // Campi obbligatori presenti nel dialog (scoped al dialog per evitare match multipli)
+  const dialog = page.locator('mat-dialog-container');
+  await expect(dialog.getByLabel('Email')).toBeVisible();
+  await expect(dialog.getByLabel('Username')).toBeVisible();
+  await expect(dialog.getByLabel('Password')).toBeVisible();
 
   // Chiude il dialog
   await page.getByRole('button', { name: 'Annulla' }).click();
@@ -126,8 +127,8 @@ test('users_deactivate: click su disattiva chiama DELETE sulla riga', async ({ p
   // Accetta il dialog di conferma prima del click (window.confirm)
   page.on('dialog', dialog => dialog.accept());
 
-  // Clicca il bottone "Disattiva" (person_off) sulla prima riga
-  await page.getByRole('button', { name: 'Disattiva' }).first().click();
+  // Clicca il bottone "Disattiva" (icona person_off) sulla prima riga
+  await page.locator('button:has-text("person_off")').first().click();
   await page.waitForLoadState('networkidle');
 
   expect(deactivateCalled).toBe(true);

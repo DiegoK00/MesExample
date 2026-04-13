@@ -238,6 +238,22 @@ public class PlaywrightApiFixture : WebApplicationFactory<Program>, IAsyncLifeti
             CreatedAt = DateTime.UtcNow,
             UserRoles = [new UserRole { RoleId = 1 }]
         });
+
+        var (userHash, userSalt) = AuthService.HashPassword("User@1234");
+        db.Users.Add(new User
+        {
+            Id = 2,
+            Email = "user@test.com",
+            Username = "user",
+            PasswordHash = userHash,
+            PasswordSalt = userSalt,
+            LoginArea = LoginArea.App,
+            IsActive = true,
+            CreatedAt = DateTime.UtcNow,
+            UserRoles = [new UserRole { RoleId = 3 }]
+        });
+        db.Categories.Add(new Category { Id = 1, Name = "Categoria Test" });
+        db.MeasureUnits.Add(new MeasureUnit { Id = 1, Name = "Pezzo", Description = "Unità base" });
         db.SaveChanges();
     }
 }

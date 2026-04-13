@@ -28,13 +28,18 @@ public class ProgramService(AppDbContext db, AuditLogService auditLog)
 
     public async Task<(ProgramResponse? Program, string? Error)> CreateAsync(CreateProgramRequest request)
     {
-        var exists = await db.Programs.AnyAsync(p => p.Code == request.Code);
+        var normalizedCode = request.Code.ToUpperInvariant();
+
+        var exists = await db.Programs.AnyAsync(p => p.Code == normalizedCode);
         if (exists)
-            return (null, $"Il codice '{request.Code}' è già in uso.");
+            return (null, $"Il codice '{normalizedCode}' è già in uso.");
+
+        if (request.Name.Contains('<') || request.Name.Contains('>'))
+            return (null, "Il nome del programma non può contenere caratteri HTML.");
 
         var program = new AppProgram
         {
-            Code = request.Code,
+            Code = normalizedCode,
             Name = request.Name,
             Description = request.Description,
             IsActive = true,
@@ -162,6 +167,9 @@ public class ProgramService(AppDbContext db, AuditLogService auditLog)
         var toRemove = await db.UserPrograms
             .Where(up => up.UserId == userId && request.ProgramIds.Contains(up.ProgramId))
             .ToListAsync();
+
+        if (toRemove.Count == 0)
+            return (false, null);
 
         db.UserPrograms.RemoveRange(toRemove);
         await db.SaveChangesAsync();

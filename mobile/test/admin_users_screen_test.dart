@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
@@ -69,11 +70,8 @@ const _mockUsersPage = UsersPageResponse(
 void main() {
   group('AdminUsersScreen', () {
     testWidgets('mostra il CircularProgressIndicator durante il caricamento', (tester) async {
-      // Usa un completer per controllare la durata del Future
-      final completer = Future<UsersPageResponse>.delayed(
-        const Duration(seconds: 10),
-        () => _mockUsersPage,
-      );
+      // Completer che non si risolve mai → nessun timer pendente a cleanup
+      final completer = Completer<UsersPageResponse>();
       final service = _FakeUsersService();
       // Override diretto tramite closure
       final router = GoRouter(
@@ -82,7 +80,7 @@ void main() {
           GoRoute(
             path: '/admin/users',
             builder: (_, __) => FutureBuilder<UsersPageResponse>(
-              future: completer,
+              future: completer.future,
               builder: (_, snap) => snap.connectionState == ConnectionState.waiting
                   ? const Scaffold(body: Center(child: CircularProgressIndicator()))
                   : const Scaffold(body: Text('done')),

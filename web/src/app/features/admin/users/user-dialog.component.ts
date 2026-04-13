@@ -24,6 +24,7 @@ const ALL_ROLES: RoleOption[] = [
   { id: 1, name: 'SuperAdmin' },
   { id: 2, name: 'Admin' },
   { id: 3, name: 'User' },
+  { id: 4, name: 'Configurator' },
 ];
 
 @Component({

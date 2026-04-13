@@ -74,6 +74,30 @@ class AdminHomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             _NavCard(
+              icon: Icons.inventory_2,
+              title: 'Articoli',
+              subtitle: 'Gestisci l\'anagrafica articoli',
+              color: Colors.purple,
+              onTap: () => context.go('/admin/articles'),
+            ),
+            const SizedBox(height: 12),
+            _NavCard(
+              icon: Icons.category,
+              title: 'Categorie',
+              subtitle: 'Gestisci le categorie articoli',
+              color: Colors.blue,
+              onTap: () => context.go('/admin/categories'),
+            ),
+            const SizedBox(height: 12),
+            _NavCard(
+              icon: Icons.straighten,
+              title: 'Unità di Misura',
+              subtitle: 'Gestisci le unità di misura',
+              color: Colors.green,
+              onTap: () => context.go('/admin/measure-units'),
+            ),
+            const SizedBox(height: 12),
+            _NavCard(
               icon: Icons.history,
               title: 'Audit Log',
               subtitle: 'Visualizza le attività recenti',
@@ -130,7 +154,7 @@ class _NavCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(icon, color: color, size: 28),

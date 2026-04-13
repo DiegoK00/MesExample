@@ -37,6 +37,7 @@ export class AuthService {
     this.clearSession();
     const area = this._currentUser()?.loginArea;
     this._currentUser.set(null);
+    this._token.set(null);
     this.router.navigate([area === 1 ? '/admin/login' : '/app/login']);
   }
 

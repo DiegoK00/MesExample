@@ -93,7 +93,7 @@ Task<string?> GetLatestResetTokenAsync(string email)
 
 ---
 
-## Test Copertura — 36 test
+## Test Copertura — 77 test (100% pass — 2026-04-12)
 
 ### Auth (`Auth/AuthPlaywrightTests.cs` — 7 test)
 
@@ -162,6 +162,71 @@ Task<string?> GetLatestResetTokenAsync(string email)
 | Paginazione pageSize | pageSize=1 → al massimo 1 item restituito |
 | Senza token | 401 |
 
+### Articles (`Articles/ArticlesPlaywrightTests.cs` — 7 test)
+
+| Test | Verifica |
+|------|---------|
+| GetAll autenticato | 200 + array JSON |
+| GetAll activeOnly | 200 + tutti gli items con isActive=true |
+| Create valido | 201 + Location + code/name/isActive nel body |
+| Create codice duplicato | 409 |
+| Update valido | 200 + name/price aggiornati |
+| Delete esistente | 204 |
+| Delete inesistente | 404 |
+
+### Categories (`Categories/CategoriesPlaywrightTests.cs` — 6 test)
+
+| Test | Verifica |
+|------|---------|
+| GetAll autenticato | 200 + array JSON |
+| GetAll activeOnly | 200 + array valido (Category non ha isActive) |
+| Create valido | 201 + Location + name nel body |
+| Create nome duplicato | 409 |
+| Update esistente | 200 + name aggiornato |
+| Delete esistente | 204 |
+| Delete inesistente | 404 |
+
+### MeasureUnits (`MeasureUnits/MeasureUnitsPlaywrightTests.cs` — 6 test)
+
+| Test | Verifica |
+|------|---------|
+| GetAll autenticato | 200 + array JSON |
+| GetAll activeOnly | 200 + array valido (MeasureUnit non ha isActive) |
+| Create valido | 201 + Location + name nel body |
+| Create nome duplicato | 409 |
+| Update esistente | 200 + name aggiornato |
+| Delete esistente | 204 |
+| Delete inesistente | 404 |
+
+### Article Edge Cases (`Common/ArticleEdgeCaseTests.cs` — 11 test)
+
+| Test | Verifica |
+|------|---------|
+| Lifecycle: Create→SoftDelete→Reactivate | Transizioni stato isActive + deletedAt |
+| ActiveOnly filter esclude articoli eliminati | GetAll normale li mostra, activeOnly=true no |
+| FK invalida: categoryId non esiste | 409 con id nel messaggio |
+| FK invalida: umId non esiste | 409 con id nel messaggio |
+| FK invalida: um2Id non esiste | 409 con id nel messaggio |
+| Category rename riflessa in articolo | GET /articles/{id} mostra nuovo nome categoria |
+| UM2: crea con entrambe le UM | Response ha umId, um2Id, umName, um2Name |
+| UM2: update rimuove seconda UM | um2Id e um2Name diventano null |
+| Concurrency: stesso codice 3 richieste parallele | Esattamente 1 × 201, 2 × 409 |
+| Code case-sensitivity | ART001 e art001 coesistono (case-sensitive) |
+| AuditLog trail dopo lifecycle | audit-logs contiene article.created |
+
+### CrossLayer Tier 2 (`Common/CrossLayerPlaywrightTests.cs` — 8 test)
+
+| Test | Verifica |
+|------|---------|
+| RateLimiting within limit | 3 GET /users successivi → tutti 200 |
+| RateLimiting wait between | GET + sleep 2s + GET → entrambi 200 |
+| ConcurrentUpdates same resource | 2 PUT /programs simultanei → entrambi 200, last-write-wins |
+| ConcurrentCreates different resources | 3 POST /categories simultanee → tutte 201 |
+| TokenRefresh after logout | Refresh token revocato dopo logout → 401 sul POST /auth/refresh |
+| TokenReuse after revocation | refreshToken usato dopo logout → 401 |
+| Authorization non-admin cannot create program | App user POST /programs → 403 |
+| Authorization admin creates, app user views | Admin crea programma, app user lo vede in GET /programs |
+
 ---
 
 ## Note
@@ -170,3 +235,5 @@ Task<string?> GetLatestResetTokenAsync(string email)
 - Kestrel si avvia su porta 0 (casuale) → nessun conflitto con API in esecuzione
 - I test Playwright verificano **headers HTTP reali** (es. `Content-Type`, `Location`) che i test WebApplicationFactory non testano
 - Per CI: non richiede API avviata esternamente — la fixture è completamente self-contained
+- Seed include: admin@test.com (SuperAdmin, area Admin), user@test.com (User, area App), Category id=1, MeasureUnit id=1
+- Content-Type per ProblemDetails è `application/problem+json` (non `application/json`)

@@ -129,6 +129,9 @@ export class AdminLayoutComponent {
   navItems: NavItem[] = [
     { label: 'Utenti', icon: 'people', route: '/admin/users' },
     { label: 'Programmi', icon: 'apps', route: '/admin/programs' },
+    { label: 'Articoli', icon: 'inventory_2', route: '/admin/articles' },
+    { label: 'Categorie', icon: 'category', route: '/admin/categories' },
+    { label: 'Unità di Misura', icon: 'straighten', route: '/admin/measure-units' },
     { label: 'Audit Log', icon: 'history', route: '/admin/audit-logs' }
   ];
 

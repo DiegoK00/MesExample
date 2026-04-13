@@ -32,6 +32,22 @@ export const ADMIN_ROUTES: Routes = [
         loadComponent: () => import('./programs/programs.component').then(m => m.ProgramsComponent)
       },
       {
+        path: 'categories',
+        loadComponent: () => import('./categories/categories.component').then(m => m.CategoriesComponent)
+      },
+      {
+        path: 'measure-units',
+        loadComponent: () => import('./measure-units/measure-units.component').then(m => m.MeasureUnitsComponent)
+      },
+      {
+        path: 'articles',
+        loadComponent: () => import('./articles/articles.component').then(m => m.ArticlesComponent)
+      },
+      {
+        path: 'articles/:id/bom',
+        loadComponent: () => import('./bill-of-materials/bill-of-materials.component').then(m => m.BillOfMaterialsComponent)
+      },
+      {
         path: 'audit-logs',
         loadComponent: () => import('./audit-logs/audit-logs.component').then(m => m.AuditLogsComponent)
       }

@@ -79,8 +79,8 @@ void main() {
       await tester.pumpWidget(buildWidget());
       await tester.pumpAndSettle();
       expect(find.byType(TextFormField), findsNWidgets(2));
-      expect(find.text('Nuova password'), findsOneWidget);
-      expect(find.text('Conferma password'), findsOneWidget);
+      expect(find.widgetWithText(TextFormField, 'Nuova password'), findsOneWidget);
+      expect(find.widgetWithText(TextFormField, 'Conferma password'), findsOneWidget);
     });
 
     testWidgets('validazione: password vuota mostra errore', (tester) async {

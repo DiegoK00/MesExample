@@ -60,7 +60,7 @@ test('audit_logs_filter: filtro per azione aggiorna la tabella', async ({ page }
   await page.getByLabel('Azione').click();
 
   // Seleziona "user.login" dal pannello del select
-  await page.getByRole('option', { name: 'user.login' }).click();
+  await page.getByRole('option', { name: 'user.login', exact: true }).click();
   await page.waitForLoadState('networkidle');
 
   // Verifica che la chiamata contenga il filtro action

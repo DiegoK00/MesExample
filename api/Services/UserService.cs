@@ -45,6 +45,9 @@ public class UserService(AppDbContext db, AuditLogService auditLog)
 
     public async Task<(UserResponse? User, string? Error)> CreateAsync(CreateUserRequest request)
     {
+        if (request.Email.Contains('<') || request.Email.Contains('>'))
+            return (null, "Email non valida: caratteri non consentiti.");
+
         var emailExists = await db.Users.AnyAsync(u => u.Email == request.Email && u.LoginArea == request.LoginArea);
         if (emailExists)
             return (null, "Email già registrata per questa area.");

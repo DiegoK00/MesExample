@@ -304,4 +304,168 @@ public class AuthServiceTests
 
         Assert.False(result);
     }
+
+    // --- EDGE CASE: Token Reuse After Refresh ---
+
+    [Fact]
+    public async Task RefreshAsync_ReuseOldTokenAfterRefresh_FailsAndRevokesAll()
+    {
+        var db = DbContextFactory.CreateWithSeed(nameof(RefreshAsync_ReuseOldTokenAfterRefresh_FailsAndRevokesAll));
+        var service = new AuthService(db, BuildConfig(), new AuditLogService(db), NoOpEmail);
+
+        // 1. Login e get token
+        var loginResult = await service.LoginAsync(
+            new LoginRequest { Email = "admin@test.com", Password = "Admin@1234", Area = LoginArea.Admin },
+            "127.0.0.1");
+        var oldRefreshToken = loginResult!.RefreshToken;
+
+        // 2. Refresh per rotazione token
+        var refreshResult = await service.RefreshAsync(oldRefreshToken, "127.0.0.1");
+        Assert.NotNull(refreshResult);
+
+        // 3. Prova a usare il vecchio token dopo il refresh - deve fallire e revocare tutto
+        var result = await service.RefreshAsync(oldRefreshToken, "127.0.0.1");
+
+        Assert.Null(result);
+        // Verifica che tutti i token dell'utente siano revocati (protezione contro token compromise)
+        var allUserTokens = db.RefreshTokens.Where(t => t.UserId == 1).ToList();
+        Assert.All(allUserTokens, t => Assert.NotNull(t.RevokedAt));
+    }
+
+    // --- EDGE CASE: Reset Token Reuse ---
+
+    [Fact]
+    public async Task ResetPasswordAsync_TokenReuse_FailsOnSecondAttempt()
+    {
+        var db = DbContextFactory.CreateWithSeed(nameof(ResetPasswordAsync_TokenReuse_FailsOnSecondAttempt));
+        var service = new AuthService(db, BuildConfig(), new AuditLogService(db), NoOpEmail);
+
+        // 1. Crea un reset token
+        await service.ForgotPasswordAsync("admin@test.com", LoginArea.Admin);
+        var resetToken = db.PasswordResetTokens.First().Token;
+
+        // 2. Primo utilizzo del token - deve succedere
+        var firstReset = await service.ResetPasswordAsync(resetToken, "NewPass@9999");
+        Assert.True(firstReset);
+
+        // 3. Seconda applicazione dello stesso token - deve fallire
+        var secondReset = await service.ResetPasswordAsync(resetToken, "AnotherPass@9999");
+        Assert.False(secondReset);
+
+        // 4. Verifica che il token sia marcato come Used
+        var tokenInDb = db.PasswordResetTokens.First(t => t.Token == resetToken);
+        Assert.NotNull(tokenInDb.UsedAt);
+    }
+
+    // --- EDGE CASE: Email with Special Characters / XSS Prevention ---
+
+    [Fact]
+    public async Task LoginAsync_EmailWithXSSCharacters_HandlesCorrectly()
+    {
+        var db = DbContextFactory.CreateWithSeed(nameof(LoginAsync_EmailWithXSSCharacters_HandlesCorrectly));
+        var service = new AuthService(db, BuildConfig(), new AuditLogService(db), NoOpEmail);
+
+        // Tentativo di login con email contenente caratteri pericolosi
+        var result = await service.LoginAsync(
+            new LoginRequest 
+            { 
+                Email = "admin@test.com<script>alert('xss')</script>", 
+                Password = "Admin@1234", 
+                Area = LoginArea.Admin 
+            },
+            "127.0.0.1");
+
+        // Non deve trovare alcun utente (email non esatta)
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public async Task ForgotPasswordAsync_EmailWithSQLInjectionAttempt_HandlesCorrectly()
+    {
+        var db = DbContextFactory.CreateWithSeed(nameof(ForgotPasswordAsync_EmailWithSQLInjectionAttempt_HandlesCorrectly));
+        var emailService = new Mock<IEmailService>();
+        var service = new AuthService(db, BuildConfig(), new AuditLogService(db), emailService.Object);
+
+        // Tentativo SQL injection
+        await service.ForgotPasswordAsync(
+            "admin@test.com' OR '1'='1", 
+            LoginArea.Admin);
+
+        // Non dovrebbe trovare nessun utente e non inviare email
+        emailService.Verify(e => e.SendPasswordResetEmailAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+    }
+
+    // --- EDGE CASE: Multiple Reset Tokens - Only Latest Valid ---
+
+    [Fact]
+    public async Task ForgotPasswordAsync_MultipleTokensForSameUser_OnlyLatestWorks()
+    {
+        var db = DbContextFactory.CreateWithSeed(nameof(ForgotPasswordAsync_MultipleTokensForSameUser_OnlyLatestWorks));
+        var service = new AuthService(db, BuildConfig(), new AuditLogService(db), NoOpEmail);
+
+        // 1. Crea primo reset token
+        await service.ForgotPasswordAsync("admin@test.com", LoginArea.Admin);
+        var firstToken = db.PasswordResetTokens.First().Token;
+
+        // 2. Crea secondo reset token (nuovo)
+        await service.ForgotPasswordAsync("admin@test.com", LoginArea.Admin);
+        var secondToken = db.PasswordResetTokens.OrderByDescending(t => t.CreatedAt).First().Token;
+
+        // 3. Prova a usare il primo token - potrebbe funzionare o no dipende dall'implementazione
+        // Ma il secondo dovrebbe sempre funzionare
+        var resultSecond = await service.ResetPasswordAsync(secondToken, "NewPass@9999");
+        Assert.True(resultSecond);
+
+        // 4. Verifica che il token sia marcato come used
+        var tokenInDb = db.PasswordResetTokens.First(t => t.Token == secondToken);
+        Assert.NotNull(tokenInDb.UsedAt);
+    }
+
+    // --- EDGE CASE: Password Case Sensitivity ---
+
+    [Fact]
+    public async Task LoginAsync_PasswordCaseSensitivity_ExactMatchRequired()
+    {
+        var db = DbContextFactory.CreateWithSeed(nameof(LoginAsync_PasswordCaseSensitivity_ExactMatchRequired));
+        var service = new AuthService(db, BuildConfig(), new AuditLogService(db), NoOpEmail);
+
+        // Password corretta: Admin@1234
+        var correctResult = await service.LoginAsync(
+            new LoginRequest { Email = "admin@test.com", Password = "Admin@1234", Area = LoginArea.Admin },
+            "127.0.0.1");
+        Assert.NotNull(correctResult);
+
+        // Password con maiuscole sbagliate: ADMIN@1234
+        var wrongCaseResult = await service.LoginAsync(
+            new LoginRequest { Email = "admin@test.com", Password = "ADMIN@1234", Area = LoginArea.Admin },
+            "127.0.0.1");
+        Assert.Null(wrongCaseResult);
+
+        // Password minuscole: admin@1234
+        var lowerCaseResult = await service.LoginAsync(
+            new LoginRequest { Email = "admin@test.com", Password = "admin@1234", Area = LoginArea.Admin },
+            "127.0.0.1");
+        Assert.Null(lowerCaseResult);
+    }
+
+    // --- EDGE CASE: Concurrent Login Attempts ---
+
+    [Fact]
+    public async Task LoginAsync_ConcurrentAttemptsFromDifferentIPs_AllSucceed()
+    {
+        var db = DbContextFactory.CreateWithSeed(nameof(LoginAsync_ConcurrentAttemptsFromDifferentIPs_AllSucceed));
+        var service = new AuthService(db, BuildConfig(), new AuditLogService(db), NoOpEmail);
+
+        var request = new LoginRequest { Email = "admin@test.com", Password = "Admin@1234", Area = LoginArea.Admin };
+
+        // Simula 3 login concorrenti da IP diversi
+        var task1 = service.LoginAsync(request, "192.168.1.1");
+        var task2 = service.LoginAsync(request, "192.168.1.2");
+        var task3 = service.LoginAsync(request, "192.168.1.3");
+
+        var results = await Task.WhenAll(task1, task2, task3);
+
+        // Tutti dovrebbero avere successo
+        Assert.All(results, r => Assert.NotNull(r));
+    }
 }

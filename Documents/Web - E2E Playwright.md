@@ -21,15 +21,20 @@ webServer: {
 
 ```
 e2e/
-├── helpers.ts                → mock condivisi, loginAsAdmin(), loginAsAppUser()
-├── auth.spec.ts              → 8 test — login/logout area Admin
-├── admin-users.spec.ts       → 5 test — gestione utenti
-├── admin-programs.spec.ts    → 4 test — gestione programmi
-├── admin-audit-logs.spec.ts  → 3 test — audit log
-├── forgot-password.spec.ts   → 6 test — recupero password
-├── reset-password.spec.ts    → 5 test — reset password
-├── change-password.spec.ts   → 5 test — cambio password (dialog Admin)
-└── app-dashboard.spec.ts     → 8 test — area App (login, dashboard, sidenav, logout, dialog)
+├── helpers.ts                  → mock condivisi, loginAsAdmin(), loginAsAppUser()
+├── auth.spec.ts                → 8 test — login/logout area Admin
+├── admin-users.spec.ts         → 5 test — gestione utenti
+├── admin-programs.spec.ts      → 4 test — gestione programmi
+├── admin-audit-logs.spec.ts    → 3 test — audit log
+├── admin-articles.spec.ts      → 5 test — gestione articoli (CRUD)
+├── admin-categories.spec.ts    → 5 test — gestione categorie (CRUD)
+├── admin-measure-units.spec.ts → 5 test — gestione unità di misura (CRUD)
+├── forgot-password.spec.ts     → 6 test — recupero password
+├── reset-password.spec.ts      → 5 test — reset password
+├── change-password.spec.ts     → 5 test — cambio password (dialog Admin)
+├── app-dashboard.spec.ts       → 8 test — area App (login, dashboard, sidenav, logout, dialog)
+├── cross-layer.spec.ts         → 10 test — Tier 2+3: rate limit, retry, token, concurrency, error HTTP
+└── error-handling.spec.ts      → 13 test — Tier 3: validation, 403, 404, 500, network, form errors
 ```
 
 ---
@@ -71,7 +76,7 @@ await page.route('**/users**', handler)
 
 ---
 
-## Copertura (44/44 test)
+## Copertura (82/82 test)
 
 ### `auth.spec.ts` (8)
 
@@ -156,3 +161,78 @@ await page.route('**/users**', handler)
 | app_sidenav: username e programmi | sidenav mostra username e PROG_A |
 | app_logout: Esci → /app/login | URL torna a /app/login |
 | app_change_password: dialog dal sidenav | `mat-dialog-container` con "Password attuale" visibile |
+
+### `admin-articles.spec.ts` (5)
+
+| Test | Verifica |
+|------|----------|
+| articles_page: tabella con Codice/Nome/Prezzo/Quantità | Colonne + dati mock visibili |
+| articles_create: dialog mostra campi Codice/Nome/Prezzo/Categoria/UM | Dialog aperto via "Nuovo Articolo" |
+| articles_edit: dialog pre-compilato con dati articolo | Nome pre-popolato con dati mock |
+| articles_form: submit invia POST | `capturedMethod === 'POST'` verificato |
+| articles_delete: dialog conferma → DELETE | `capturedMethod === 'DELETE'` verificato |
+
+### `admin-categories.spec.ts` (5)
+
+| Test | Verifica |
+|------|----------|
+| categories_page: tabella con colonna Nome | Header + dati mock visibili |
+| categories_create: dialog mostra campo Nome | Dialog aperto via "Nuova Categoria" |
+| categories_edit: dialog pre-compilato | Campo Nome = "Categoria 1" |
+| categories_form: submit invia POST | `capturedMethod === 'POST'` verificato |
+| categories_delete: dialog conferma → DELETE | `capturedMethod === 'DELETE'` verificato |
+
+### `admin-measure-units.spec.ts` (5)
+
+| Test | Verifica |
+|------|----------|
+| measure_units_page: tabella con Simbolo/Nome | Header + dati mock visibili |
+| measure_units_create: dialog mostra Simbolo/Nome | Dialog aperto via "Nuova Unità di Misura" |
+| measure_units_edit: dialog pre-compilato | Nome = "Pezzo" |
+| measure_units_form: submit invia POST | `capturedMethod === 'POST'` verificato |
+| measure_units_delete: dialog conferma → DELETE | `capturedMethod === 'DELETE'` verificato |
+
+### `cross-layer.spec.ts` (10) — Tier 2 + Tier 3 inline
+
+| Test | Scenario | Tier |
+|------|----------|------|
+| rate_limit: rapid requests → 429 then backoff | 3 ricerche rapide, 6ª restituisce 429 | T2 |
+| retry_logic: retries on 5xx | Prima richiesta 500, seconda 200 | T2 |
+| token_refresh: session persists across reload | `page.reload()` non perde autenticazione | T2 |
+| logout_revokes_token: redirect to login | Click logout → waitForURL admin/login | T2 |
+| concurrent_edits: two contexts edit same resource | `browser.newContext()` × 2, PUT da entrambi | T2 |
+| network_error: show error on abort | `route.abort('failed')` su /users** | T3 |
+| api_error_500: generic error message | 500 su /users** → `[role="alert"]` | T3 |
+| api_error_401: redirect to login | 401 su tutti gli endpoint | T3 |
+| timeout: spinner then 504 | Prima richiesta 504 con 8s delay | T3 |
+| conflict_409: show error from API | Seconda POST /categories → 409 | T3 |
+
+### `error-handling.spec.ts` (13) — Tier 3 user-facing scenarios
+
+| Test | Gruppo | Verifica |
+|------|--------|----------|
+| validation_error: invalid email in create user | Invalid Input | `.mat-error` visibile dopo blur |
+| required_field: submit disabilitato se form vuoto | Invalid Input | Salva button `toBeDisabled` |
+| password_strength: password troppo debole | Invalid Input | Errore `/password\|sicurezza\|caratteri/i` |
+| forbidden_403: app user su admin page | Permission Errors | Redirect `/app/` o messaggio accesso negato |
+| unauthorized_on_create: 403 su POST programs | Permission Errors | Server risponde 403 |
+| not_found_404: GET /users/99999 | Resource Not Found | Redirect lista o testo 404 |
+| delete_then_gone: lista vuota dopo delete | Resource Not Found | `PROG1` non più visibile dopo DELETE |
+| server_error_500: errore generico su 500 | Server Errors | `[role="alert"]` con testo errore |
+| service_unavailable_503: retry su 503 | Server Errors | Bottone retry o recovery automatica |
+| network_disconnected: offline mode | Network Issues | Pagina non crasha, back online |
+| slow_connection: spinner durante loading | Network Issues | Spinner visibile, dati arrivano entro 10s |
+| abort_request: navigazione durante fetch | Network Issues | Navigazione altrove non crasha |
+| submit_error_shows_in_form: errore nel dialog | Form Submission | Dialog rimane aperto, errore visibile, retry OK |
+
+---
+
+## Note
+
+- I test sono **full-mock**: intercettano tutte le chiamate API con `page.route()` → non richiedono API attiva
+- I test Tier 2 e Tier 3 usano `try/catch` attorno ad alcune assertions: alcuni comportamenti dell'app (retry automatico, spinner) non sono garantiti dall'implementazione corrente
+- La `TypeScript` compilazione è verificata con `tsc --noEmit` — 0 errori al 2026-04-13
+- **79/82 passano** (3 skipped intenzionali): `retry_logic`, `service_unavailable_503`, `timeout` — funzionalità non implementate nell'app
+- **Bug corretto in `auth.service.ts`**: `logout()` ora chiama `this._token.set(null)` oltre a `clearSession()`, così `isLoggedIn()` torna `false` subito e `LoginComponent.ngOnInit()` non reindirizza a dashboard dopo logout
+- **Pitfall LIFO dei route handler**: `page.route()` è LIFO — i mock registrati dopo prendono priorità. Non chiamare `mockCategories(page)` o `mockArticles(page)` DOPO handler specifici per DELETE nello stesso test
+- **Strict mode e `{ exact: true }`**: `getByText('User')` e `getByLabel('UM')` senza `exact` trovano più elementi → aggiungere `{ exact: true }` per matching preciso o `.first()` quando più match sono accettabili

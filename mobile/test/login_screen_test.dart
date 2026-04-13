@@ -5,8 +5,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile/core/models/auth_models.dart';
 import 'package:mobile/core/services/auth_service.dart';
+import 'package:mobile/core/services/preferences_service.dart';
 import 'package:mobile/features/auth/login/login_screen.dart';
 import 'package:provider/provider.dart';
+
+// Fake PreferencesService — evita SharedPreferences.getInstance() nei test
+class _FakePreferencesService extends PreferencesService {
+  @override
+  Future<void> setLastArea(int area) async {}
+}
 
 // Fake controllabile che estende AuthService — nessuna chiamata HTTP reale
 class _FakeAuthService extends AuthService {
@@ -35,10 +42,14 @@ void main() {
       routes: [
         GoRoute(path: '/login', builder: (_, __) => LoginScreen(area: area)),
         GoRoute(path: '/home', builder: (_, __) => const Scaffold(body: Text('Home'))),
+        GoRoute(path: '/admin', builder: (_, __) => const Scaffold(body: Text('Admin'))),
       ],
     );
-    return ChangeNotifierProvider<AuthService>.value(
-      value: fakeAuth,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AuthService>.value(value: fakeAuth),
+        ChangeNotifierProvider<PreferencesService>(create: (_) => _FakePreferencesService()),
+      ],
       child: MaterialApp.router(routerConfig: router),
     );
   }

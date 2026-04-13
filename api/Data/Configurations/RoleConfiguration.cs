@@ -18,7 +18,8 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
         builder.HasData(
             new Role { Id = 1, Name = "SuperAdmin", Description = "Full system access" },
             new Role { Id = 2, Name = "Admin", Description = "Administrative access" },
-            new Role { Id = 3, Name = "User", Description = "Standard user access" }
+            new Role { Id = 3, Name = "User", Description = "Standard user access" },
+            new Role { Id = 4, Name = "Configurator", Description = "Can create, update and delete configuration data (categories, measure units)" }
         );
     }
 }

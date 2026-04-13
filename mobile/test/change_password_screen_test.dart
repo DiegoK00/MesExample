@@ -34,17 +34,17 @@ class _FakeAuthService extends AuthService {
   }
 }
 
-Widget _buildApp(_FakeAuthService auth, {int area = 2}) {
-//  final backRoute = area == 1 ? '/admin' : '/home';
+Widget _buildApp(_FakeAuthService auth) { // , {int area = 2}
+  // final backRoute = area == 1 ? '/admin' : '/home';
   final router = GoRouter(
     initialLocation: '/change-password',
     routes: [
       GoRoute(
         path: '/change-password',
-        builder: (_, __) => const ChangePasswordScreen(),
+        builder: (_, _) => const ChangePasswordScreen(),
       ),
-      GoRoute(path: '/home', builder: (_, __) => const Scaffold(body: Text('Home'))),
-      GoRoute(path: '/admin', builder: (_, __) => const Scaffold(body: Text('Admin'))),
+      GoRoute(path: '/home', builder: (_, _) => const Scaffold(body: Text('Home'))),
+      GoRoute(path: '/admin', builder: (_, _) => const Scaffold(body: Text('Admin'))),
     ],
   );
   return ChangeNotifierProvider<AuthService>.value(

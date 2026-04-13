@@ -39,7 +39,7 @@ test('change_password: dialog ha i campi "Password attuale", "Nuova password", "
   await openChangePasswordDialog(page);
 
   await expect(page.getByLabel('Password attuale')).toBeVisible();
-  await expect(page.getByLabel('Nuova password')).toBeVisible();
+  await expect(page.getByLabel('Nuova password', { exact: true })).toBeVisible();
   await expect(page.getByLabel('Conferma nuova password')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Salva' })).toBeVisible();
 });
@@ -70,7 +70,7 @@ test('change_password: cambio riuscito mostra "Password aggiornata con successo"
   await page.waitForSelector('mat-dialog-container');
 
   await page.getByLabel('Password attuale').fill('OldPassword1!');
-  await page.getByLabel('Nuova password').fill('NewPassword1!');
+  await page.getByLabel('Nuova password', { exact: true }).fill('NewPassword1!');
   await page.getByLabel('Conferma nuova password').fill('NewPassword1!');
   await page.getByRole('button', { name: 'Salva' }).click();
 
@@ -91,7 +91,7 @@ test('change_password: password attuale errata mostra messaggio di errore', asyn
   await page.waitForSelector('mat-dialog-container');
 
   await page.getByLabel('Password attuale').fill('WrongPassword1!');
-  await page.getByLabel('Nuova password').fill('NewPassword1!');
+  await page.getByLabel('Nuova password', { exact: true }).fill('NewPassword1!');
   await page.getByLabel('Conferma nuova password').fill('NewPassword1!');
   await page.getByRole('button', { name: 'Salva' }).click();
 

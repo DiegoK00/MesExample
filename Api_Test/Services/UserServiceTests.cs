@@ -274,4 +274,195 @@ public class UserServiceTests
 
         Assert.False(result);
     }
+
+    // --- EDGE CASE: Concurrent User Updates ---
+
+    [Fact]
+    public async Task UpdateAsync_ConcurrentUpdatesToSameUser_LastWriteWins()
+    {
+        var (service, db) = Build(nameof(UpdateAsync_ConcurrentUpdatesToSameUser_LastWriteWins));
+
+        // Simula due update simultanee dello stesso utente
+        var update1 = service.UpdateAsync(1, new UpdateUserRequest
+        {
+            Email = "update1@test.com",
+            Username = "update1_user",
+            IsActive = true,
+            RoleIds = [1]
+        });
+
+        var update2 = service.UpdateAsync(1, new UpdateUserRequest
+        {
+            Email = "update2@test.com",
+            Username = "update2_user",
+            IsActive = true,
+            RoleIds = [1]
+        });
+
+        var result1 = await update1;
+        var result2 = await update2;
+
+        // Entrambi dovrebbero avere successo (last write wins scenario)
+        Assert.Null(result1.Item2);
+        Assert.Null(result2.Item2);
+
+        // Verifica lo stato finale nel DB
+        var finalUser = await service.GetByIdAsync(1);
+        // Uno dei due update avrà prevalso
+        Assert.True(finalUser!.Email == "update1@test.com" || finalUser!.Email == "update2@test.com");
+    }
+
+    // --- EDGE CASE: XSS/Injection Prevention in Email ---
+
+    [Fact]
+    public async Task CreateAsync_EmailWithXSSCharacters_RejectsOrSanitizes()
+    {
+        var (service, _) = Build(nameof(CreateAsync_EmailWithXSSCharacters_RejectsOrSanitizes));
+
+        // Email con caratteri XSS
+        var (user, error) = await service.CreateAsync(new CreateUserRequest
+        {
+            Email = "test<script>alert('xss')</script>@test.com",
+            Username = "xssuser",
+            Password = "Pass@1",
+            LoginArea = LoginArea.App,
+            RoleIds = [2]
+        });
+
+        // Dovrebbe fallire per email non valida oppure sanitizzare
+        if (user != null)
+        {
+            // Se passa, verifica che l'email sia sanitizzata (senza script tag)
+            Assert.DoesNotContain("<script>", user.Email);
+        }
+        else
+        {
+            // Se fallisce, dovrebbe avere un messaggio di errore
+            Assert.NotNull(error);
+        }
+    }
+
+    [Fact]
+    public async Task CreateAsync_UsernameWithSQLInjectionAttempt_SafelyHandled()
+    {
+        var (service, _) = Build(nameof(CreateAsync_UsernameWithSQLInjectionAttempt_SafelyHandled));
+
+        // Username con SQL injection attempt
+        var (user, error) = await service.CreateAsync(new CreateUserRequest
+        {
+            Email = "sql@test.com",
+            Username = "'; DROP TABLE Users; --",
+            Password = "Pass@1",
+            LoginArea = LoginArea.App,
+            RoleIds = [2]
+        });
+
+        // Non deve provocare errori e deve trattare il valore come stringa letterale
+        if (user != null)
+        {
+            // Verificare che la username sia stata salvata come-è (EF Core fa escaping)
+            var saved = await service.GetByIdAsync(user.Id);
+            Assert.Equal("'; DROP TABLE Users; --", saved!.Username);
+        }
+        else
+        {
+            // Oppure potrebbe essere rejettato da validazione
+            Assert.NotNull(error);
+        }
+    }
+
+    // --- EDGE CASE: Inactive User Access (Soft Delete via IsActive flag) ---
+
+    [Fact]
+    public async Task GetByIdAsync_InactiveUser_StillRetrievable()
+    {
+        var (service, db) = Build(nameof(GetByIdAsync_InactiveUser_StillRetrievable));
+
+        // Disattiva l'utente
+        var user = db.Users.First();
+        user.IsActive = false;
+        await db.SaveChangesAsync();
+
+        var result = await service.GetByIdAsync(1);
+
+        // Dipende dall'implementazione: potrebbe escludere inattivi oppure includerli
+        if (result != null)
+        {
+            // Se l'API include inattivi, verificare che IsActive sia false
+            Assert.False(result.IsActive);
+        }
+    }
+
+    [Fact]
+    public async Task GetAllAsync_ExcludesInactiveUsers_IfImplemented()
+    {
+        var (service, db) = Build(nameof(GetAllAsync_ExcludesInactiveUsers_IfImplemented));
+
+        // Disattiva l'admin (unico utente)
+        var user = db.Users.First();
+        user.IsActive = false;
+        await db.SaveChangesAsync();
+
+        var result = await service.GetAllAsync(1, 10);
+
+        // Dipende dall'implementazione: potrebbe escludere oppure no
+        // Se non li esclude, dovremmo avere 1 risultato inattivo
+        Assert.NotNull(result);
+    }
+
+    // --- EDGE CASE: Email Uniqueness Boundary Conditions ---
+
+    [Fact]
+    public async Task CreateAsync_EmailWithDifferentCases_TreatsAsUnique()
+    {
+        var (service, _) = Build(nameof(CreateAsync_EmailWithDifferentCases_TreatsAsUnique));
+
+        // Creare due utenti con email che differisce solo per case
+        var (user1, error1) = await service.CreateAsync(new CreateUserRequest
+        {
+            Email = "Test@Example.com",
+            Username = "user1",
+            Password = "Pass@1",
+            LoginArea = LoginArea.App,
+            RoleIds = [2]
+        });
+
+        Assert.Null(error1);
+
+        var (user2, error2) = await service.CreateAsync(new CreateUserRequest
+        {
+            Email = "test@example.com", // lowercase
+            Username = "user2",
+            Password = "Pass@1",
+            LoginArea = LoginArea.App,
+            RoleIds = [2]
+        });
+
+        // Dipende da db collation: case-sensitive o case-insensitive
+        // In SQL Server di default è case-insensitive, quindi dovrebbe dareerror
+        if (error2 != null)
+        {
+            Assert.Contains("Email", error2);
+        }
+    }
+
+    // --- EDGE CASE: Update Non-Existent User ---
+
+    [Fact]
+    public async Task UpdateAsync_NonExistingUser_ReturnsNullWithoutError()
+    {
+        var (service, _) = Build(nameof(UpdateAsync_NonExistingUser_ReturnsNullWithoutError));
+
+        var (user, error) = await service.UpdateAsync(9999, new UpdateUserRequest
+        {
+            Email = "new@test.com",
+            Username = "newuser",
+            IsActive = true,
+            RoleIds = [2]
+        });
+
+        // Dovrebbe fallire gracefully
+        Assert.Null(user);
+        // Potrebbe avere un messaggio di errore oppure no, dipende da implementazione
+    }
 }

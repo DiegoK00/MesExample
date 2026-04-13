@@ -14,6 +14,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
     public DbSet<PasswordResetToken> PasswordResetTokens => Set<PasswordResetToken>();
+    public DbSet<Category> Categories => Set<Category>();
+    public DbSet<MeasureUnit> MeasureUnits => Set<MeasureUnit>();
+    public DbSet<Article> Articles => Set<Article>();
+    public DbSet<BillOfMaterial> BillOfMaterials => Set<BillOfMaterial>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
