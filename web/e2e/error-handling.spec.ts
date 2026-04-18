@@ -260,6 +260,7 @@ test.describe('Error Handling: Form Submission Errors', () => {
 
     await loginAsAdmin(page);
     await page.goto('/admin/categories');
+    await page.waitForLoadState('networkidle');
 
     await page.getByRole('button', { name: 'Nuova Categoria' }).click();
 
