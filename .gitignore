@@ -36,7 +36,6 @@ api/**/appsettings.*.json
 
 *.sln
 *.sln.*
-*.csproj
 *.csproj.user
 *.sln.docstates
 *.suo
