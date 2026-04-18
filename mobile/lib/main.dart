@@ -10,6 +10,7 @@ import 'core/services/audit_logs_service.dart';
 import 'core/services/categories_service.dart';
 import 'core/services/measure_units_service.dart';
 import 'core/services/articles_service.dart';
+import 'core/services/bill_of_materials_service.dart';
 import 'features/auth/login/login_screen.dart';
 import 'features/auth/forgot_password/forgot_password_screen.dart';
 import 'features/auth/reset_password/reset_password_screen.dart';
@@ -23,6 +24,7 @@ import 'features/admin/audit_logs/admin_audit_logs_screen.dart';
 import 'features/admin/categories/admin_categories_screen.dart';
 import 'features/admin/measure_units/admin_measure_units_screen.dart';
 import 'features/admin/articles/admin_articles_screen.dart';
+import 'features/admin/articles/admin_article_bom_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -56,6 +58,7 @@ class _MyAppState extends State<MyApp> {
   late final CategoriesService _categoriesService;
   late final MeasureUnitsService _measureUnitsService;
   late final ArticlesService _articlesService;
+  late final BillOfMaterialsService _billOfMaterialsService;
   final _messengerKey = GlobalKey<ScaffoldMessengerState>();
 
   @override
@@ -67,6 +70,7 @@ class _MyAppState extends State<MyApp> {
     _categoriesService = CategoriesService(widget.auth);
     _measureUnitsService = MeasureUnitsService(widget.auth);
     _articlesService = ArticlesService(widget.auth);
+    _billOfMaterialsService = BillOfMaterialsService(widget.auth);
 
     // Rebuild when theme changes so MaterialApp.router gets the new themeMode.
     widget.prefs.addListener(() => setState(() {}));
@@ -120,6 +124,12 @@ class _MyAppState extends State<MyApp> {
         GoRoute(
           path: '/admin/articles',
           builder: (_, _) => const AdminArticlesScreen(),
+        ),
+        GoRoute(
+          path: '/admin/articles/:id/bom',
+          builder: (_, state) => AdminArticleBOMScreen(
+            articleId: int.parse(state.pathParameters['id']!),
+          ),
         ),
         GoRoute(
           path: '/admin/audit-logs',
@@ -222,6 +232,7 @@ class _MyAppState extends State<MyApp> {
         Provider.value(value: _categoriesService),
         Provider.value(value: _measureUnitsService),
         Provider.value(value: _articlesService),
+        Provider.value(value: _billOfMaterialsService),
       ],
       child: MaterialApp.router(
         title: 'MesClaude',

@@ -5,11 +5,15 @@
 Tutte le route sotto `/admin/` (escluso `/admin/login`) sono protette da `adminGuard`.
 
 ```
-/admin/login        → LoginComponent (area=1)
-/admin/             → redirect /admin/users
-/admin/users        → UsersComponent
-/admin/programs     → ProgramsComponent
-/admin/audit-logs   → AuditLogsComponent
+/admin/login                              → LoginComponent (area=1)
+/admin/                                   → redirect /admin/users
+/admin/users                              → UsersComponent
+/admin/programs                           → ProgramsComponent
+/admin/audit-logs                         → AuditLogsComponent
+/admin/articles                           → ArticlesComponent
+/admin/categories                         → CategoriesComponent
+/admin/measure-units                      → MeasureUnitsComponent
+/admin/articles/:parentArticleId/bom      → BillOfMaterialsComponent
 ```
 
 ---
@@ -18,7 +22,7 @@ Tutte le route sotto `/admin/` (escluso `/admin/login`) sono protette da `adminG
 
 Struttura a **sidenav** Angular Material:
 - **Toolbar** fissa: icona + titolo "Backoffice", nome utente, pulsante `aria-label="Menu"` per aprire il sidenav
-- **Sidenav** a destra (mode `over`): nav items (Utenti, Programmi, Audit Log) + link Esci (`role="link"`)
+- **Sidenav** a destra (mode `over`): nav items (Utenti, Programmi, Audit Log, Articoli, Categorie, Unità di Misura) + link Esci (`role="link"`)
 - Contiene `<router-outlet />` per i componenti figli
 
 ---
@@ -104,7 +108,7 @@ Tabella con colonne: Timestamp, Utente, **Azione**, **Entità**, IP, Dettagli.
 | `programs.service.spec.ts` | 7 | getAll (activeOnly), getById, create, update, delete |
 | `audit-logs.service.spec.ts` | 5 | getLogs con filtri (action, entityName, userId, from/to, paginazione) |
 | `account.service.spec.ts` | 2 | getMe, changePassword |
-| `admin-layout.component.spec.ts` | 5 | titolo Backoffice, username in toolbar, aria-label Menu, logout(), 3 nav items |
+| `admin-layout.component.spec.ts` | 5 | titolo Backoffice, username in toolbar, aria-label Menu, logout(), 6 nav items (Utenti, Programmi, Articoli, Categorie, Unità di Misura, Audit Log) |
 | `users.component.spec.ts` | 7 | colonne tabella, dati mock, ngOnInit, search(), deactivate() con/senza conferma, openCreateDialog() |
 | `user-dialog.component.spec.ts` | 9 | crea: titolo, campo password, area login, form invalido, create(); modifica: titolo, no password, pre-popola email, update() |
 | `user-programs-dialog.component.spec.ts` | 6 | caricamento init, available() esclude assegnati e inattivi, titolo con username, assign() → lista aggiornata, revoke() → rimosso, errore di caricamento |

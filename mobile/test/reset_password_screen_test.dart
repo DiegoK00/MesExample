@@ -35,15 +35,15 @@ void main() {
       routes: [
         GoRoute(
           path: '/reset-password',
-          builder: (_, __) => ResetPasswordScreen(area: area, token: token),
+          builder: (_, _) => ResetPasswordScreen(area: area, token: token),
         ),
         GoRoute(
           path: '/login',
-          builder: (_, __) => const Scaffold(body: Text('Login App')),
+          builder: (_, _) => const Scaffold(body: Text('Login App')),
         ),
         GoRoute(
           path: '/admin-login',
-          builder: (_, __) => const Scaffold(body: Text('Login Admin')),
+          builder: (_, _) => const Scaffold(body: Text('Login Admin')),
         ),
         GoRoute(
           path: '/forgot-password/:area',

@@ -39,7 +39,7 @@ Widget _buildApp(AuditLogsService service) {
   final router = GoRouter(
     initialLocation: '/admin/audit-logs',
     routes: [
-      GoRoute(path: '/admin/audit-logs', builder: (_, __) => const AdminAuditLogsScreen()),
+      GoRoute(path: '/admin/audit-logs', builder: (_, _) => const AdminAuditLogsScreen()),
     ],
   );
 

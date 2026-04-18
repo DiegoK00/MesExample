@@ -51,6 +51,20 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 ---
 
+## Autorizzazione BOM
+
+Policy attuale per `BillOfMaterialsController`:
+
+- `GET /bill-of-materials/by-parent/{parentArticleId}` -> qualsiasi utente autenticato
+- `GET /bill-of-materials/{parentArticleId}/{componentArticleId}` -> qualsiasi utente autenticato
+- `POST /bill-of-materials` -> solo `SuperAdmin,Admin`
+- `PUT /bill-of-materials/{parentArticleId}/{componentArticleId}` -> solo `SuperAdmin,Admin`
+- `DELETE /bill-of-materials/{parentArticleId}/{componentArticleId}` -> solo `SuperAdmin,Admin`
+
+Questo consente la lettura della distinta base anche a utenti non admin autenticati, mantenendo le modifiche ristrette all'area amministrativa.
+
+---
+
 ## Comandi EF Core
 
 ```bash

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, signal, inject } from '@angular/core';
+import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -115,8 +115,7 @@ export class BillOfMaterialDialogComponent implements OnInit {
   private articlesService = inject(ArticlesService);
   private unitsService = inject(MeasureUnitsService);
   dialogRef = inject(MatDialogRef<BillOfMaterialDialogComponent>);
-
-  @Inject(MAT_DIALOG_DATA) data!: DialogData;
+  data = inject<DialogData>(MAT_DIALOG_DATA);
 
   form!: FormGroup;
   loading = signal(false);
@@ -175,6 +174,10 @@ export class BillOfMaterialDialogComponent implements OnInit {
       scrapFactor: [initialValues.scrapFactor, [Validators.min(0), Validators.max(1)]],
       fixedScrap: [initialValues.fixedScrap, Validators.min(0)]
     });
+
+    if (this.data.bom) {
+      this.form.get('componentArticleId')?.disable();
+    }
   }
 
   save(): void {

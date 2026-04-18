@@ -35,7 +35,7 @@ Widget _buildApp(UsersService usersService) {
   final router = GoRouter(
     initialLocation: '/admin/users',
     routes: [
-      GoRoute(path: '/admin/users', builder: (_, __) => const AdminUsersScreen()),
+      GoRoute(path: '/admin/users', builder: (_, _) => const AdminUsersScreen()),
     ],
   );
 
@@ -79,7 +79,7 @@ void main() {
         routes: [
           GoRoute(
             path: '/admin/users',
-            builder: (_, __) => FutureBuilder<UsersPageResponse>(
+            builder: (_, _) => FutureBuilder<UsersPageResponse>(
               future: completer.future,
               builder: (_, snap) => snap.connectionState == ConnectionState.waiting
                   ? const Scaffold(body: Center(child: CircularProgressIndicator()))

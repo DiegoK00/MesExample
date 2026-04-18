@@ -25,11 +25,11 @@ Widget _buildApp(_FakeAuthService auth) {
     routes: [
       GoRoute(
         path: '/programs',
-        builder: (_, __) => const ProgramsScreen(),
+        builder: (_, _) => const ProgramsScreen(),
       ),
       GoRoute(
         path: '/home',
-        builder: (_, __) => const Scaffold(body: Text('Home')),
+        builder: (_, _) => const Scaffold(body: Text('Home')),
       ),
     ],
   );

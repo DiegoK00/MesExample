@@ -31,15 +31,15 @@ void main() {
       routes: [
         GoRoute(
           path: '/forgot-password',
-          builder: (_, __) => ForgotPasswordScreen(area: area),
+          builder: (_, _) => ForgotPasswordScreen(area: area),
         ),
         GoRoute(
           path: '/login',
-          builder: (_, __) => const Scaffold(body: Text('Login App')),
+          builder: (_, _) => const Scaffold(body: Text('Login App')),
         ),
         GoRoute(
           path: '/admin-login',
-          builder: (_, __) => const Scaffold(body: Text('Login Admin')),
+          builder: (_, _) => const Scaffold(body: Text('Login Admin')),
         ),
       ],
     );

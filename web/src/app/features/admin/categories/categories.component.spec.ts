@@ -29,10 +29,9 @@ describe('CategoriesComponent', () => {
     await TestBed.configureTestingModule({
       imports: [CategoriesComponent, NoopAnimationsModule],
       providers: [
-        { provide: CategoriesService, useValue: categoriesServiceSpy },
-        { provide: MatDialog, useValue: dialogSpy }
+        { provide: CategoriesService, useValue: categoriesServiceSpy }
       ]
-    }).compileComponents();
+    }).overrideProvider(MatDialog, { useValue: dialogSpy }).compileComponents();
 
     fixture = TestBed.createComponent(CategoriesComponent);
     component = fixture.componentInstance;

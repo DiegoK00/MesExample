@@ -1,7 +1,7 @@
 import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { of, throwError } from 'rxjs';
+import { EMPTY, of, throwError } from 'rxjs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './login.component';
 import { AuthService } from '../../../core/services/auth.service';
@@ -30,7 +30,10 @@ describe('LoginComponent', () => {
   function buildComponent(area: 1 | 2 = 1) {
     authServiceSpy = jasmine.createSpyObj('AuthService', ['login', 'isLoggedIn', 'setCurrentUser']);
     accountServiceSpy = jasmine.createSpyObj('AccountService', ['getMe']);
-    routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    routerSpy = jasmine.createSpyObj('Router', ['navigate', 'createUrlTree', 'serializeUrl']);
+    (routerSpy as any).events = EMPTY;
+    routerSpy.createUrlTree.and.returnValue({} as any);
+    routerSpy.serializeUrl.and.returnValue('');
 
     authServiceSpy.isLoggedIn.and.returnValue(false);
 

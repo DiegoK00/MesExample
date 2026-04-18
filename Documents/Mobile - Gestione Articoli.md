@@ -48,8 +48,8 @@ Tutte protette dal redirect admin esistente (loginArea == 1).
 - **Modifica** → push `AdminArticleFormScreen` (edit pre-popolato)
 - **Disattiva** (visibile solo se `isActive`) → `showDialog` → soft delete
 
-### AdminArticleFormScreen (form dedicato)
-- Screen separato (troppi campi per un bottom sheet)
+### AdminArticleFormScreen (form dedicato — definito in `admin_articles_screen.dart`)
+- Nella stessa file di `AdminArticlesScreen` (troppi campi per un bottom sheet)
 - Campi: Codice (solo crea), Nome, Descrizione, Categoria (`DropdownButtonFormField`), Prezzo, UM, UM2 (con opzione "—"), Misure, Composizione, Switch Attivo (solo edit)
 - Carica categorie e UM via `CategoriesService` e `MeasureUnitsService` prima di mostrare il form
 - Ritorna `true` al pop se salvato → la lista si ricarica
@@ -75,6 +75,20 @@ Tutte protette dal redirect admin esistente (loginArea == 1).
 | `ArticlesService` | `getAll`, `create`, `update`, `delete` |
 
 Tutti registrati come `Provider.value` in `main.dart`.
+
+---
+
+## Widget Test (`test/admin_articles_screen_test.dart`) — 7 test
+
+| Test | Cosa verifica |
+|------|---------------|
+| lista articoli con codice e nome | ART001/ART002 visibili con rispettivi nomi |
+| badge Attivo/Inattivo | badge corretto per articolo attivo e inattivo |
+| chip categoria e prezzo | mostra nome categoria e prezzo formattato |
+| errore se eccezione | icona errore + testo "Errore nel caricamento" |
+| lista vuota | messaggio "Nessun articolo trovato" |
+| FAB → Nuovo Articolo | apre `AdminArticleFormScreen` con titolo "Nuovo Articolo" |
+| tap Modifica → Modifica Articolo | apre `AdminArticleFormScreen` con titolo "Modifica Articolo" |
 
 ---
 

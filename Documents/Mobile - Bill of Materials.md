@@ -1,112 +1,170 @@
-# Mobile — Gestione Bill of Materials (Flutter) — ⏳ NON COMPLETATO
+# Mobile - Gestione Bill of Materials (Flutter)
 
-## Status
-🔴 **Non implementato** — Solo lettura (GET), niente create/edit/delete da mobile
+## Stato complessivo - 2026-04-17
 
----
-
-## Route da aggiungere (`main.dart`)
-
-```
-/admin/articles/:id/bom  → AdminArticleBOMScreen
-```
-
-Protetto dal redirect admin esistente (loginArea == 1).
-
----
-
-## Nav Integration (AdminArticlesScreen)
-
-Nel component `AdminArticlesScreen`, aggiungere bottone "BOM" nell'`_ArticleCard`:
-
-```
-IconButton(
-  icon: Icon(Icons.build),
-  color: Colors.blue,
-  tooltip: "Componenti",
-  onPressed: () => context.go('/admin/articles/$articleId/bom'),
-)
-```
+| Componente | Stato | Note |
+|------------|-------|------|
+| Modello `BillOfMaterialResponse` | ✅ Implementato | `article_models.dart` |
+| Modelli `CreateBillOfMaterialRequest` / `UpdateBillOfMaterialRequest` | ✅ Implementati | `article_models.dart` |
+| `BillOfMaterialsService.getByParentArticle()` | ✅ Implementato | GET lista BOM |
+| `BillOfMaterialsService.get()` | ✅ Implementato | GET singolo componente |
+| `BillOfMaterialsService.create()` | ✅ Implementato | POST create |
+| `BillOfMaterialsService.update()` | ✅ Implementato | PUT update |
+| `BillOfMaterialsService.delete()` | ✅ Implementato | DELETE |
+| `AdminArticleBOMScreen` | ✅ Implementato | Lista, vuoto, errore, pull-to-refresh, FAB, edit, delete |
+| Dialog `admin_article_bom_dialog.dart` | ✅ Implementato | Create + edit |
+| Bottone `BOM` in `AdminArticlesScreen` | ✅ Implementato | `context.push('/admin/articles/$id/bom')` |
+| Rotta `/admin/articles/:id/bom` | ✅ Implementata | `main.dart` |
+| Provider `BillOfMaterialsService` | ✅ Implementato | `main.dart` |
+| Widget test screen | ✅ Implementati | Include titolo, lista, vuoto, errore, FAB, edit, delete |
+| Unit test service | ✅ Implementati | GET lista/vuota/errore rete/non-200 + create/update/delete (10 test) |
+| Mock GET/POST/PUT/DELETE in `mock_client.dart` | ✅ Implementati | Supporto integration test |
 
 ---
 
-## Screens
+## Cosa fa oggi il mobile
 
-### AdminArticleBOMScreen (`features/admin/articles/admin_article_bom_screen.dart`)
+- Navigazione da `AdminArticlesScreen` alla distinta base dell'articolo padre
+- Caricamento codice articolo padre per l'AppBar
+- Lista componenti BOM con quantità, UM e scarti
+- Creazione nuovo componente tramite dialog
+- Modifica componente esistente tramite dialog
+- Eliminazione con conferma e feedback via SnackBar
+- Refresh manuale della lista
 
-**Parametri** (da route):
-- `articleId: int` — Estratto dalla rotta
+## Regole di accesso
 
-**Features**:
-- AppBar: Titolo "Bill of Materials - {ArticleCode}"
-- Bottone back → torna a lista articoli
-- `FutureBuilder` che carica:
-  1. Articolo padre via `ArticlesService.getById()`
-  2. Lista BOM via `BillOfMaterialsService.getByParentArticle()`
-- Lista con `RefreshIndicator` ("tira giù per ricaricare")
-- Ogni card mostra:
-  - **Componente**: Code + Name
-  - **Quantità**: numero + tipo (PHYSICAL/PERCENTAGE)
-  - **UM**: nome unità di misura
-  - **Scarto**: mostra percentuale/fattore/fisso se presenti
-- Stato di errore: icona + testo "Errore nel caricamento"
-- Stato vuoto: "Nessun componente trovato"
+- Lettura BOM: consentita a qualsiasi utente autenticato lato API
+- Modifica BOM (`create`, `update`, `delete`): consentita solo a `Admin` e `SuperAdmin` lato API
+- La UI mobile che modifica la BOM resta nel flusso admin
 
 ---
 
-## Modelli (`core/models/article_models.dart`)
+## Route
 
-Aggiungere:
+Registrata in `main.dart`:
 
 ```dart
-class BillOfMaterialResponse {
-  final int parentArticleId;
-  final String parentArticleCode;
-  final String parentArticleName;
-  final int componentArticleId;
-  final String componentArticleCode;
-  final String componentArticleName;
-  final double quantity;
-  final String quantityType;  // 'PHYSICAL' o 'PERCENTAGE'
-  final int umId;
-  final String umName;
-  final double scrapPercentage;
-  final double scrapFactor;
-  final double fixedScrap;
-
-  BillOfMaterialResponse({ required this.parentArticleId, ... });
-
-  factory BillOfMaterialResponse.fromJson(Map<String, dynamic> json) => ...;
-}
+GoRoute(
+  path: '/admin/articles/:id/bom',
+  builder: (_, state) => AdminArticleBOMScreen(
+    articleId: int.parse(state.pathParameters['id']!),
+  ),
+),
 ```
 
 ---
 
-## Servizio (`core/services/bill_of_materials_service.dart`)
+## Service
 
-Metodi:
-- `getByParentArticle(int parentArticleId)` → `Future<List<BillOfMaterialResponse>>`
+File: `mobile/lib/core/services/bill_of_materials_service.dart`
 
-Note:
-- Niente create/update/delete da mobile
-- Solo lettura (GET)
-
----
-
-## Aggiornamenti (`core/constants/api_constants.dart`)
+Metodi disponibili:
 
 ```dart
-static const String billOfMaterials = '$baseUrl/bill-of-materials';
+Future<List<BillOfMaterialResponse>> getByParentArticle(int parentArticleId)
+Future<BillOfMaterialResponse> get(int parentArticleId, int componentArticleId)
+Future<BillOfMaterialResponse> create(CreateBillOfMaterialRequest request)
+Future<BillOfMaterialResponse> update(int parentArticleId, int componentArticleId, UpdateBillOfMaterialRequest request)
+Future<void> delete(int parentArticleId, int componentArticleId)
 ```
 
 ---
 
-## TODO - Implementazione
+## UI
 
-- [ ] Aggiungere `BillOfMaterialResponse` a `article_models.dart`
-- [ ] Creare `BillOfMaterialsService` con metodo `getByParentArticle`
-- [ ] Creare screen `AdminArticleBOMScreen`
-- [ ] Aggiungere rotta in `main.dart`
-- [ ] Aggiungere bottone BOM in `_ArticleCard` di articoli (AdminArticlesScreen)
-- [ ] Aggiornare `api_constants.dart`
-- [ ] Scrivere tests Flutter quando completato
+### `AdminArticleBOMScreen`
+
+- AppBar con titolo `Bill of Materials - {ArticleCode}`
+- `FutureBuilder` per caricare articolo padre + lista BOM
+- `FloatingActionButton` per create
+- Azioni `edit` e `delete` per ogni componente
+- Stato vuoto: `Nessun componente trovato per questo articolo.`
+- Stato errore: `Errore nel caricamento dei componenti`
+
+### `AdminArticleBOMDialog`
+
+- Modalità create e edit
+- Campi:
+  - Articolo Componente
+  - Quantita
+  - Tipo Quantita
+  - Unita di Misura
+  - Scarto Percentuale
+  - Scarto Fattore
+  - Scarto Fisso
+- In edit il componente è bloccato
+
+---
+
+## Test
+
+### Unit test service
+
+File: `mobile/test/bill_of_materials_service_test.dart`
+
+Copertura attuale (10 test):
+
+- `getByParentArticle` -> lista deserializzata
+- `getByParentArticle` -> lista vuota
+- `getByParentArticle` -> `NetworkException`
+- `getByParentArticle` -> risposta non 200
+- `create` -> BOM deserializzata su 201
+- `create` -> eccezione con messaggio su risposta non 200/201
+- `update` -> BOM aggiornata su 200
+- `update` -> eccezione su risposta non 200
+- `delete` -> completa senza eccezione su 204
+- `delete` -> eccezione con messaggio su risposta non 204
+
+### Widget test screen
+
+File: `mobile/test/admin_article_bom_screen_test.dart`
+
+Copertura attuale:
+
+- AppBar mostra codice articolo padre
+- Lista mostra codice/nome/quantita/scarto
+- Stato vuoto
+- Stato errore
+- FAB apre dialog creazione
+- Edit apre dialog precompilato
+- Delete mostra conferma e chiama il service
+
+---
+
+## Mock integration
+
+File: `mobile/integration_test/helpers/mock_client.dart`
+
+Endpoint BOM mockati:
+
+- `GET /bill-of-materials/by-parent/{id}`
+- `POST /bill-of-materials`
+- `PUT /bill-of-materials/{parent}/{component}`
+- `DELETE /bill-of-materials/{parent}/{component}`
+- `GET /articles/{id}` per il titolo AppBar
+
+---
+
+## Integration test E2E
+
+File: `mobile/integration_test/bom_flow_test.dart`
+
+Copertura (7 test):
+
+- `bom_navigate` — tap BOM su ART001 apre AdminArticleBOMScreen
+- `bom_title` — AppBar mostra il codice articolo padre (ART001)
+- `bom_list` — componente visibile con codice, nome, quantità e scarto
+- `bom_fab` — FAB apre dialog "Aggiungi Componente" con campi corretti
+- `bom_edit` — tap Modifica apre dialog precompilato con quantità e scarto
+- `bom_delete_cancel` — tap Annulla mantiene il componente in lista
+- `bom_delete_confirm` — conferma elimina mostra snackbar "Componente eliminato"
+- `bom_back` — back button torna alla lista articoli
+
+Esecuzione: `flutter test integration_test/bom_flow_test.dart` (richiede emulatore/device).
+
+---
+
+## Residuo
+
+- Nessuno — implementazione e test completi

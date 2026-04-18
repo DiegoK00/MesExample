@@ -29,10 +29,9 @@ describe('ProgramsComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ProgramsComponent, NoopAnimationsModule],
       providers: [
-        { provide: ProgramsService, useValue: programsServiceSpy },
-        { provide: MatDialog, useValue: dialogSpy }
+        { provide: ProgramsService, useValue: programsServiceSpy }
       ]
-    }).compileComponents();
+    }).overrideProvider(MatDialog, { useValue: dialogSpy }).compileComponents();
 
     fixture = TestBed.createComponent(ProgramsComponent);
     component = fixture.componentInstance;

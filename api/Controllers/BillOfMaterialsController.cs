@@ -6,12 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("bill-of-materials")]
 public class BillOfMaterialsController(BillOfMaterialService service) : ControllerBase
 {
     /// <summary>
     /// GET /bill-of-materials/by-parent/{parentArticleId}
     /// Ottiene tutti i componenti di un articolo padre
+    /// Qualsiasi utente autenticato
     /// </summary>
     [HttpGet("by-parent/{parentArticleId}")]
     [Authorize]
@@ -24,6 +25,7 @@ public class BillOfMaterialsController(BillOfMaterialService service) : Controll
     /// <summary>
     /// GET /bill-of-materials/{parentArticleId}/{componentArticleId}
     /// Ottiene una relazione BOM specifica
+    /// Qualsiasi utente autenticato
     /// </summary>
     [HttpGet("{parentArticleId}/{componentArticleId}")]
     [Authorize]

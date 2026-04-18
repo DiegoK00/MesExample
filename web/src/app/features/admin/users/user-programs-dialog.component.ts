@@ -140,6 +140,8 @@ export class UserProgramsDialogComponent implements OnInit {
         this.loading.set(false);
       },
       error: () => {
+        this.assigned.set([]);
+        this.allPrograms.set([]);
         this.loading.set(false);
         this.snackBar.open('Errore nel caricamento programmi', 'OK', { duration: 3000 });
       }

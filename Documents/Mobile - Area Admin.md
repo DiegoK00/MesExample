@@ -21,6 +21,10 @@ Due aree distinte, ognuna con la propria pagina di login:
 | `/admin/users` | Admin | Lista utenti |
 | `/admin/programs` | Admin | Lista programmi |
 | `/admin/audit-logs` | Admin | Audit log |
+| `/admin/articles` | Admin | Lista articoli |
+| `/admin/categories` | Admin | Lista categorie |
+| `/admin/measure-units` | Admin | Lista unità di misura |
+| `/admin/articles/:id/bom` | Admin | Bill of Materials articolo |
 
 La logica di redirect in `GoRouter` gestisce:
 - Utenti non autenticati → reindirizzati alla login appropriata
@@ -54,7 +58,7 @@ Provider.value(value: _auditLogsService),
 
 Dashboard con:
 - Benvenuto + ruolo dell'utente corrente
-- Tre card di navigazione: Utenti, Programmi, Audit Log
+- Sei card di navigazione: Utenti, Programmi, Audit Log, Articoli, Categorie, Unità di Misura
 - Pulsante logout nell'AppBar
 
 ### `AdminUsersScreen`
@@ -93,19 +97,33 @@ Dashboard con:
 
 | File | Test | Cosa verifica |
 |------|------|---------------|
-| `test/admin_home_screen_test.dart` | 4 | Username/ruolo visibili, tre card presenti, navigazione, logout |
+| `test/admin_home_screen_test.dart` | 4 | Username/ruolo visibili, sei card presenti, navigazione, logout |
 | `test/admin_users_screen_test.dart` | 5 | Loading, lista utenti, badge stato, errore, lista vuota |
 | `test/admin_programs_screen_test.dart` | 4 | Lista programmi, badge stato, errore, lista vuota |
 | `test/admin_audit_logs_screen_test.dart` | 4 | Lista log, entità/id, errore, lista vuota |
+| `test/admin_articles_screen_test.dart` | 7 | Lista articoli, badge stato, chip categoria/prezzo, errore, lista vuota, FAB crea, tap modifica (vedi Mobile - Gestione Articoli) |
+| `test/admin_article_bom_screen_test.dart` | 7 | AppBar codice padre, lista componenti, stato vuoto, errore, FAB dialog, edit dialog, delete confirm (vedi Mobile - Bill of Materials) |
 
 ---
 
 ## File coinvolti
 
-- `lib/main.dart` — routing esteso, MultiProvider con servizi dati
+- `lib/main.dart` — routing esteso, MultiProvider con tutti i servizi admin
 - `lib/features/auth/login/login_screen.dart` — navigazione post-login basata su area
-- `lib/features/admin/admin_home_screen.dart` — nuovo
-- `lib/features/admin/users/admin_users_screen.dart` — nuovo
-- `lib/features/admin/programs/admin_programs_screen.dart` — nuovo
-- `lib/features/admin/audit_logs/admin_audit_logs_screen.dart` — nuovo
-- `lib/core/constants/api_constants.dart` — aggiunti endpoint users/programs/audit-logs
+- `lib/features/admin/admin_home_screen.dart` — dashboard con 6 card
+- `lib/features/admin/users/admin_users_screen.dart`
+- `lib/features/admin/programs/admin_programs_screen.dart`
+- `lib/features/admin/audit_logs/admin_audit_logs_screen.dart`
+- `lib/features/admin/categories/admin_categories_screen.dart`
+- `lib/features/admin/measure_units/admin_measure_units_screen.dart`
+- `lib/features/admin/articles/admin_articles_screen.dart` (contiene anche `AdminArticleFormScreen`)
+- `lib/features/admin/articles/admin_article_bom_screen.dart`
+- `lib/features/admin/articles/admin_article_bom_dialog.dart`
+- `lib/core/services/users_service.dart`
+- `lib/core/services/programs_service.dart`
+- `lib/core/services/audit_logs_service.dart`
+- `lib/core/services/categories_service.dart`
+- `lib/core/services/measure_units_service.dart`
+- `lib/core/services/articles_service.dart`
+- `lib/core/services/bill_of_materials_service.dart`
+- `lib/core/constants/api_constants.dart` — aggiunti tutti gli endpoint admin

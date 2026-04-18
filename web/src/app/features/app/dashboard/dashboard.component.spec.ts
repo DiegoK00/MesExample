@@ -49,9 +49,11 @@ describe('DashboardComponent', () => {
   });
 
   it('mostra "Nessun programma assegnato" se lista vuota', async () => {
-    mockAuthService.currentUser = signal({ ...mockUser, programs: [] });
+    mockAuthService.currentUser.set({ ...mockUser, programs: [] });
     fixture.detectChanges();
     await fixture.whenStable();
     expect(compiled.textContent).toContain('Nessun programma assegnato');
   });
+
+  afterEach(() => mockAuthService.currentUser.set(mockUser));
 });

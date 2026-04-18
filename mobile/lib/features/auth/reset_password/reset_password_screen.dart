@@ -36,10 +36,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       await context.read<AuthService>().resetPassword(widget.token, _passwordCtrl.text);
       if (mounted) setState(() { _loading = false; _done = true; });
     } catch (_) {
-      if (mounted) setState(() {
+      if (mounted) {
+        setState(() {
         _loading = false;
         _error = 'Token non valido o scaduto. Richiedi un nuovo link di reset.';
       });
+      }
     }
   }
 

@@ -35,7 +35,7 @@ Widget _buildApp(ProgramsService service) {
   final router = GoRouter(
     initialLocation: '/admin/programs',
     routes: [
-      GoRoute(path: '/admin/programs', builder: (_, __) => const AdminProgramsScreen()),
+      GoRoute(path: '/admin/programs', builder: (_, _) => const AdminProgramsScreen()),
     ],
   );
 

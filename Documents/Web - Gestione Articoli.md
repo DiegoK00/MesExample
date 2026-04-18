@@ -98,3 +98,13 @@ Tabella con colonne: **Codice**, Nome, Categoria, **Prezzo** (EUR), **UM / UM2**
 
 Aggiunto `{ id: 4, name: 'Configurator' }` nella lista `ALL_ROLES` di `UserDialogComponent`.
 Permette di assegnare il ruolo Configurator agli utenti dal backoffice.
+
+---
+
+## Test
+
+| File | Test | Cosa verifica |
+|------|------|---------------|
+| `categories.component.spec.ts` | 7 | colonne tabella, dati mock, ngOnInit, delete() con/senza conferma, openCreateDialog(), openEditDialog() |
+| `measure-units.component.spec.ts` | 7 | colonne tabella, dati mock, ngOnInit, delete() con/senza conferma, openCreateDialog(), openEditDialog() |
+| `article-dialog.component.spec.ts` | 17 | crea: titolo, campo codice, campi obbligatori, form invalido, create(); modifica: titolo, no codice, codice readonly, pre-popola nome/prezzo, update(), checkbox isActive, errore su create() fallito |

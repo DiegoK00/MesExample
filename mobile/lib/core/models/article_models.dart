@@ -96,3 +96,111 @@ class ArticleResponse {
         deletedByUsername: json['deletedByUsername'] as String?,
       );
 }
+
+class BillOfMaterialResponse {
+  final int parentArticleId;
+  final String parentArticleCode;
+  final String parentArticleName;
+  final int componentArticleId;
+  final String componentArticleCode;
+  final String componentArticleName;
+  final double quantity;
+  final String quantityType; // 'PHYSICAL' o 'PERCENTAGE'
+  final int umId;
+  final String umName;
+  final double scrapPercentage;
+  final double scrapFactor;
+  final double fixedScrap;
+
+  BillOfMaterialResponse({
+    required this.parentArticleId,
+    required this.parentArticleCode,
+    required this.parentArticleName,
+    required this.componentArticleId,
+    required this.componentArticleCode,
+    required this.componentArticleName,
+    required this.quantity,
+    required this.quantityType,
+    required this.umId,
+    required this.umName,
+    required this.scrapPercentage,
+    required this.scrapFactor,
+    required this.fixedScrap,
+  });
+
+  factory BillOfMaterialResponse.fromJson(Map<String, dynamic> json) => BillOfMaterialResponse(
+        parentArticleId: json['parentArticleId'] as int,
+        parentArticleCode: json['parentArticleCode'] as String,
+        parentArticleName: json['parentArticleName'] as String,
+        componentArticleId: json['componentArticleId'] as int,
+        componentArticleCode: json['componentArticleCode'] as String,
+        componentArticleName: json['componentArticleName'] as String,
+        quantity: (json['quantity'] as num).toDouble(),
+        quantityType: json['quantityType'] as String,
+        umId: json['umId'] as int,
+        umName: json['umName'] as String,
+        scrapPercentage: (json['scrapPercentage'] as num).toDouble(),
+        scrapFactor: (json['scrapFactor'] as num).toDouble(),
+        fixedScrap: (json['fixedScrap'] as num).toDouble(),
+      );
+}
+
+class CreateBillOfMaterialRequest {
+  final int parentArticleId;
+  final int componentArticleId;
+  final double quantity;
+  final String quantityType;
+  final int umId;
+  final double scrapPercentage;
+  final double scrapFactor;
+  final double fixedScrap;
+
+  const CreateBillOfMaterialRequest({
+    required this.parentArticleId,
+    required this.componentArticleId,
+    required this.quantity,
+    required this.quantityType,
+    required this.umId,
+    required this.scrapPercentage,
+    required this.scrapFactor,
+    required this.fixedScrap,
+  });
+
+  Map<String, dynamic> toJson() => {
+        'parentArticleId': parentArticleId,
+        'componentArticleId': componentArticleId,
+        'quantity': quantity,
+        'quantityType': quantityType,
+        'umId': umId,
+        'scrapPercentage': scrapPercentage,
+        'scrapFactor': scrapFactor,
+        'fixedScrap': fixedScrap,
+      };
+}
+
+class UpdateBillOfMaterialRequest {
+  final double quantity;
+  final String quantityType;
+  final int umId;
+  final double scrapPercentage;
+  final double scrapFactor;
+  final double fixedScrap;
+
+  const UpdateBillOfMaterialRequest({
+    required this.quantity,
+    required this.quantityType,
+    required this.umId,
+    required this.scrapPercentage,
+    required this.scrapFactor,
+    required this.fixedScrap,
+  });
+
+  Map<String, dynamic> toJson() => {
+        'quantity': quantity,
+        'quantityType': quantityType,
+        'umId': umId,
+        'scrapPercentage': scrapPercentage,
+        'scrapFactor': scrapFactor,
+        'fixedScrap': fixedScrap,
+      };
+}

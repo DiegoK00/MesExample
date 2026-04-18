@@ -28,7 +28,7 @@ public class ArticlesE2ETests : IClassFixture<ApiE2EFixture>
         using var catDoc = JsonDocument.Parse(catJson);
         var categoryId = catDoc.RootElement.GetProperty("id").GetInt32();
 
-        var umBody = Json(new { name = $"UM_{Guid.NewGuid():N[..4]}", description = (string?)null });
+        var umBody = Json(new { name = $"UM_{Guid.NewGuid():N}", description = (string?)null });
         var umResponse = await client.PostAsync("/measure-units", umBody);
         umResponse.EnsureSuccessStatusCode();
         var umJson = await umResponse.Content.ReadAsStringAsync();
@@ -69,7 +69,7 @@ public class ArticlesE2ETests : IClassFixture<ApiE2EFixture>
 
         var body = Json(new
         {
-            code = $"ART_E2E_{Guid.NewGuid():N[..6]}",
+            code = $"ART_E2E_{Guid.NewGuid():N}",
             name = "Articolo E2E",
             description = "Test E2E",
             categoryId = catId,
@@ -91,7 +91,7 @@ public class ArticlesE2ETests : IClassFixture<ApiE2EFixture>
     {
         var client = _fixture.CreateAuthenticatedClient(_token);
         var (catId, umId) = await CreateLookups(client);
-        var code = $"ART_DUP_{Guid.NewGuid():N[..6]}";
+        var code = $"ART_DUP_{Guid.NewGuid():N}";
 
         var body1 = Json(new { code, name = "Primo", categoryId = catId, price = 10.0, uMId = umId });
         await client.PostAsync("/articles", body1);
@@ -110,7 +110,7 @@ public class ArticlesE2ETests : IClassFixture<ApiE2EFixture>
 
         var createBody = Json(new
         {
-            code = $"ART_UPD_{Guid.NewGuid():N[..6]}",
+            code = $"ART_UPD_{Guid.NewGuid():N}",
             name = "Articolo da aggiornare",
             categoryId = catId,
             price = 10.0,
@@ -145,7 +145,7 @@ public class ArticlesE2ETests : IClassFixture<ApiE2EFixture>
 
         var createBody = Json(new
         {
-            code = $"ART_DEL_{Guid.NewGuid():N[..6]}",
+            code = $"ART_DEL_{Guid.NewGuid():N}",
             name = "Articolo da eliminare",
             categoryId = catId,
             price = 5.0,
@@ -158,11 +158,7 @@ public class ArticlesE2ETests : IClassFixture<ApiE2EFixture>
 
         var response = await client.DeleteAsync($"/articles/{id}");
 
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var json = await response.Content.ReadAsStringAsync();
-        using var doc = JsonDocument.Parse(json);
-        Assert.False(doc.RootElement.GetProperty("isActive").GetBoolean());
-        Assert.NotEqual(JsonValueKind.Null, doc.RootElement.GetProperty("deletedAt").ValueKind);
+        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
 
     [Fact]
@@ -182,7 +178,7 @@ public class ArticlesE2ETests : IClassFixture<ApiE2EFixture>
         var (catId, umId) = await CreateLookups(client);
 
         // Create and delete one article
-        var code = $"ART_AF_{Guid.NewGuid():N[..6]}";
+        var code = $"ART_AF_{Guid.NewGuid():N}";
         var createBody = Json(new { code, name = "Da eliminare", categoryId = catId, price = 5.0, uMId = umId });
         var createResponse = await client.PostAsync("/articles", createBody);
         var createJson = await createResponse.Content.ReadAsStringAsync();

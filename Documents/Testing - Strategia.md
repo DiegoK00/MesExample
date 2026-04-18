@@ -46,9 +46,9 @@
 
 ---
 
-## Stato Test API (.NET) — 2026-04-02
+## Stato Test API (.NET) — aggiornato 2026-04-16
 
-**66/66 test passati** — xUnit + EF Core InMemory + Moq — progetto in `Api_Test/`
+**85/85 test passati** — xUnit + EF Core InMemory + Moq — progetto in `Api_Test/`
 
 | File | Test | Cosa verifica |
 |------|------|---------------|
@@ -57,14 +57,25 @@
 | `UserServiceTests.cs` | 16 | GetAllAsync (paginazione, search), GetByIdAsync, CreateAsync (valido/email duplicata/username duplicato/stessa email altra area), UpdateAsync, DeactivateAsync, ChangePasswordAsync |
 | `ProgramServiceTests.cs` | 17 | GetAllAsync (tutti/solo attivi), GetByIdAsync, CreateAsync (valido/codice duplicato), UpdateAsync, DeleteAsync (ok/non esistente/assegnato→eccezione), AssignProgramsAsync (valido/utente inesistente/inattivo/già assegnato), RevokeProgramsAsync |
 | `AuditLogServiceTests.cs` | 8 | LogAsync (con/senza campi opzionali), GetLogsAsync (paginazione, filtri action/userId/entityName/date range, ordinamento DESC) |
+| `BillOfMaterialServiceTests.cs` | 19 | GetByParentArticleAsync (lista vuota/singolo/multipli), GetAsync (trovato/non trovato), CreateAsync (PHYSICAL/PERCENTAGE/tutti-scrap/auto-ref/duplicato/padre-inesistente/comp-inesistente/UM-inesistente), UpdateAsync (ok/UM-invalida/tipo-invalido/non-trovato), DeleteAsync (ok/non-trovato) |
 
 **Note**: `IEmailService` è mockato con `Mock.Of<IEmailService>()` (no-op) in tutti i test che non verificano il comportamento email. Nei test E2E (`Api_E2E/`, `Api_Playwright/`) è sostituito con `NoOpEmailService` via `ConfigureServices`.
 
+### Test API BOM Controller — aggiornato 2026-04-17
+
+| File | Test | Scenari |
+|------|------|---------|
+| `Api_E2E/BillOfMaterials/BillOfMaterialsE2ETests.cs` | ✅ **10 test** | GetByParentArticle (401/200+array vuoto), GetSingle (404), Create (201+Location/401/409), Update (200+dati/404), Delete (204/404) |
+| `Api_Playwright/BillOfMaterials/BillOfMaterialsPlaywrightTests.cs` | ✅ **8 test** | GetByParentArticle (200+JSON), GetSingle (404), Create (201+Location+body/409+ProblemDetails), Update (200/404), Delete (204/404) |
+
+**Fix correlato:** `[Route("[controller]")]` → `[Route("bill-of-materials")]` in `BillOfMaterialsController` (il controller non rispondeva al path usato da Web e Mobile).
+**Fix collaterale:** `ArticlesE2ETests.CreateLookups` — formato Guid `:N[..6]` non valido corretto in `:N`; `Delete` corretta da 200→204.
+
 ---
 
-## Stato Test Web (Angular) — 2026-04-01
+## Stato Test Web (Angular) — aggiornato 2026-04-17
 
-**144/144 test passati** — Jasmine + Karma + ChromeHeadless
+**293/293 test passati** — Jasmine + Karma + ChromeHeadless
 
 | File spec | Test | Cosa verifica |
 |-----------|------|---------------|
@@ -73,16 +84,19 @@
 | `users.service.spec.ts` | 10 | getAll (paginazione, search), getById, create, update, deactivate, getUserPrograms, assignPrograms, revokePrograms |
 | `programs.service.spec.ts` | 7 | getAll (activeOnly), getById, create, update, delete |
 | `audit-logs.service.spec.ts` | 5 | getLogs con filtri (action, entityName, userId, from/to, paginazione) |
+| `bill-of-materials.service.spec.ts` | 10 | getByParentArticle (lista vuota/multipli), get, create (PHYSICAL/PERCENTAGE/tutti-scrap), update, delete |
 | `auth.guard.spec.ts` | 8 | adminGuard e appGuard — not logged in, user presente, fetch /account/me, errore su fetch |
 | `auth.interceptor.spec.ts` | 5 | aggiunta header Bearer, assenza header senza token, refresh su 401, logout su refresh fallito, skip refresh su auth endpoint |
-| `login.component.spec.ts` | 10 | inizializzazione, redirect se già loggato, validazione form, submit ok/ko, loading state, toggle password |
-| `admin-layout.component.spec.ts` | 5 | titolo Backoffice, username in toolbar, aria-label Menu, logout(), 3 nav items |
+| `login.component.spec.ts` | 14 | inizializzazione, redirect se già loggato, validazione form, submit ok/ko, loading state, toggle password |
+| `admin-layout.component.spec.ts` | 5 | titolo Backoffice, username in toolbar, aria-label Menu, logout(), **6 nav items** (Utenti/Programmi/Articoli/Categorie/UM/Audit Log) |
 | `users.component.spec.ts` | 7 | colonne tabella, dati mock, ngOnInit, search(), deactivate() con/senza conferma, openCreateDialog() |
 | `user-dialog.component.spec.ts` | 9 | crea: titolo/campo password/area login/form invalido/create(); modifica: titolo/no password/pre-popola email/update() |
 | `user-programs-dialog.component.spec.ts` | 6 | caricamento init, available() esclude assegnati+inattivi, titolo con username, assign() aggiorna lista, revoke() rimuove, errore caricamento |
 | `programs.component.spec.ts` | 7 | colonne tabella, dati mock, ngOnInit, activeOnly, delete() con/senza conferma, openCreateDialog() |
 | `program-dialog.component.spec.ts` | 9 | crea: titolo/campo codice/uppercaseCode/form invalido/create(); modifica: titolo/readonly/pre-popola nome/update() |
 | `audit-logs.component.spec.ts` | 7 | colonne tabella, dati mock, ngOnInit, filtro action, clearFilters(), getActionColor() warn/primary |
+| `bill-of-materials.component.spec.ts` | 32 | init + setInput(parentArticleId), data loading (tabella/righe/codice/nome/quantità/UM/stato vuoto), scrap display (percentuale/fattore/trattino), dialog create/edit (apertura/argomenti/snackbar/reload), delete (confirm/cancel/snackbar/errore), error handling, goBack(), colonne |
+| `bill-of-material-dialog.component.spec.ts` | 32 | creazione (titolo/campi/sezione-scarto/esclusione-padre/abilitato/bottone-Crea), modifica (titolo/**componentArticleId disabilitato**/pre-popola/bottone-Aggiorna), validazioni (required/min/range), save create/edit (chiamata/chiude/errore), form submission (disabilitato/abilitato/annulla), scrap fields, loading state |
 | `app-layout.component.spec.ts` | 5 | titolo MesClaude, username in toolbar, programmi nel sidenav, messaggio lista vuota, logout() |
 | `dashboard.component.spec.ts` | 5 | "Benvenuto, {username}", email, ruoli, programmi, messaggio lista vuota |
 | `forgot-password.component.spec.ts` | 8 | area da route data, form presente, loginPath area 1/2, validazione form invalido, chiamata corretta, sent() dopo successo, sent() dopo errore (anti-enumeration) |
@@ -123,6 +137,19 @@ Usa il **dual-host pattern**: WebApplicationFactory per DI/seed + Kestrel su por
 
 ---
 
+### Mobile BOM — stato test (aggiornato 2026-04-17)
+
+| File | Stato | Scenari |
+|------|-------|---------|
+| `mobile/test/admin_article_bom_screen_test.dart` | ✅ **7 test** | AppBar codice padre, lista (codice/nome/quantità/UM/scarto), stato vuoto, stato errore, FAB crea, edit precompilato, delete con conferma |
+| `mobile/test/bill_of_materials_service_test.dart` | ✅ **10 test** | getByParentArticle (lista/vuota/NetworkException/non-200), create (201/errore con msg), update (200/errore), delete (204/errore con msg) |
+| `mobile/integration_test/bom_flow_test.dart` | ✅ **8 test E2E** | navigate, title AppBar, list content, FAB dialog, edit dialog, delete cancel, delete confirm, back |
+
+Rotta `/admin/articles/:id/bom` e provider `BillOfMaterialsService` registrati in `main.dart` ✅.
+Vedere [Mobile - Bill of Materials.md](Mobile - Bill of Materials.md) per dettaglio completo.
+
+---
+
 ## Stato Test Mobile E2E (integration_test) — 2026-04-02
 
 **6/6 test** — integration_test + MockClient + FakeSecureStorage — cartella `integration_test/`
@@ -158,9 +185,10 @@ Esecuzione: `flutter test integration_test/app_test.dart` (richiede emulatore/de
 
 ---
 
-## Stato Test Web E2E (Playwright) — 2026-04-02
+## Stato Test Web E2E (Playwright) — aggiornato 2026-04-16
 
-**44/44 test passati** — @playwright/test + Chromium — cartella `web/e2e/`
+**91/91 test passati** — @playwright/test + Chromium — cartella `web/e2e/`  
+Vedere [Web - E2E Playwright.md](Web - E2E Playwright.md) per la lista completa con dettaglio dei test Tier 2/3.
 
 | File | Test | Cosa verifica |
 |------|------|---------------|
@@ -168,7 +196,13 @@ Esecuzione: `flutter test integration_test/app_test.dart` (richiede emulatore/de
 | `admin-users.spec.ts` | 5 | Tabella utenti con colonne Email/Username/Stato, paginazione con totalCount, ricerca (query param search=), dialog creazione con campi obbligatori, disattiva utente (DELETE) |
 | `admin-programs.spec.ts` | 4 | Tabella programmi con colonne Codice/Nome/Stato, dialog creazione (uppercase codice), toggle "Solo attivi" (query param activeOnly=true), elimina programma (DELETE) |
 | `admin-audit-logs.spec.ts` | 3 | Tabella log con colonne Azione/Entità/Timestamp, filtro azione (query param action=), paginazione (navigazione pagina successiva) |
+| `admin-articles.spec.ts` | 5 | Tabella articoli, dialog creazione, dialog edit pre-compilato, submit POST, delete DELETE |
+| `admin-bom.spec.ts` | 9 | Tabella BOM con colonne, dati componente + heading padre, stato vuoto, dialog crea (campi), dialog edit (pre-compilato), form POST, form PUT, DELETE con conferma, navigazione Indietro |
+| `admin-categories.spec.ts` | 5 | Tabella categorie, dialog creazione, dialog edit, submit POST, delete DELETE |
+| `admin-measure-units.spec.ts` | 5 | Tabella unità di misura, dialog creazione, dialog edit, submit POST, delete DELETE |
 | `forgot-password.spec.ts` | 6 | Form con campo email, titolo, validazione email vuota/formato, invio riuscito (anti-enumeration), link "Torna al login" area corretta |
 | `reset-password.spec.ts` | 5 | Senza token → errore, con token → form, password troppo corta, invio riuscito → success, token scaduto (400) → errore inline |
 | `change-password.spec.ts` | 5 | Sidenav "Cambia password" apre dialog, tre campi + bottone Salva, validazione vuoti, cambio riuscito (204), password errata (400) |
 | `app-dashboard.spec.ts` | 8 | Login area App (titolo/redirect), dashboard (benvenuto/email/ruolo/programmi), sidenav (username/PROG_A), logout → /app/login, dialog cambio password |
+| `cross-layer.spec.ts` | 10 | Rate limit 429, retry su 5xx, token persiste dopo reload, logout revoca token, edit concorrente, network abort, 500 generico, 401 redirect, timeout 504, 409 conflict |
+| `error-handling.spec.ts` | 13 | Validazione input, form vuoto disabilitato, password debole, 403 area sbagliata, 403 su POST, 404, delete poi scomparso, 500, 503 retry, offline, slow connection, abort navigazione, errore nel dialog |

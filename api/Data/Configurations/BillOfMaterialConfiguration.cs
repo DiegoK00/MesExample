@@ -9,7 +9,10 @@ public class BillOfMaterialConfiguration : IEntityTypeConfiguration<BillOfMateri
     public void Configure(EntityTypeBuilder<BillOfMaterial> builder)
     {
         builder.ToTable("BillOfMaterials", t =>
-            t.HasCheckConstraint("CHK_QuantityType", "QuantityType IN ('PHYSICAL', 'PERCENTAGE')"));
+        {
+            t.HasCheckConstraint("CHK_QuantityType", "QuantityType IN ('PHYSICAL', 'PERCENTAGE')");
+            t.HasCheckConstraint("CHK_BillOfMaterials_NoSelfReference", "ParentArticleId <> ComponentArticleId");
+        });
 
         // Chiave primaria composta
         builder.HasKey(bom => new { bom.ParentArticleId, bom.ComponentArticleId });

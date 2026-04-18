@@ -183,6 +183,22 @@ MockClient buildMockClient() {
     }
 
     if (path.contains('/articles')) {
+      final segments = request.url.pathSegments;
+      final articleIndex = segments.indexOf('articles');
+      if (articleIndex >= 0 && articleIndex < segments.length - 1) {
+        final articleId = int.tryParse(segments[articleIndex + 1]);
+        final article = _articles.firstWhere(
+          (item) => item['id'] == articleId,
+          orElse: () => <String, dynamic>{},
+        );
+        if (article.isNotEmpty) {
+          return http.Response(
+            jsonEncode(article),
+            200,
+            headers: {'content-type': 'application/json'},
+          );
+        }
+      }
       return http.Response(
         jsonEncode(_articles),
         200,
@@ -204,6 +220,86 @@ MockClient buildMockClient() {
         200,
         headers: {'content-type': 'application/json'},
       );
+    }
+
+    if (path.contains('/bill-of-materials/by-parent/')) {
+      final parentId = int.tryParse(path.split('/').last) ?? 0;
+      if (parentId == 1) {
+        return http.Response(
+          jsonEncode([
+            {
+              "parentArticleId": 1,
+              "parentArticleCode": "ART001",
+              "parentArticleName": "T-Shirt Bianca",
+              "componentArticleId": 10,
+              "componentArticleCode": "TESSUTO_01",
+              "componentArticleName": "Cotone Bianco",
+              "quantity": 1.5,
+              "quantityType": "PHYSICAL",
+              "umId": 2,
+              "umName": "Metro",
+              "scrapPercentage": 5.0,
+              "scrapFactor": 0,
+              "fixedScrap": 0
+            }
+          ]),
+          200,
+          headers: {'content-type': 'application/json'},
+        );
+      }
+      return http.Response(jsonEncode([]), 200, headers: {'content-type': 'application/json'});
+    }
+
+    if (path.endsWith('/bill-of-materials') && request.method == 'POST') {
+      final body = jsonDecode(request.body) as Map<String, dynamic>;
+      return http.Response(
+        jsonEncode({
+          'parentArticleId': body['parentArticleId'],
+          'parentArticleCode': 'ART001',
+          'parentArticleName': 'T-Shirt Bianca',
+          'componentArticleId': body['componentArticleId'],
+          'componentArticleCode': 'ART002',
+          'componentArticleName': 'Cintura Pelle',
+          'quantity': body['quantity'],
+          'quantityType': body['quantityType'],
+          'umId': body['umId'],
+          'umName': body['umId'] == 2 ? 'Metro' : 'Pezzo',
+          'scrapPercentage': body['scrapPercentage'],
+          'scrapFactor': body['scrapFactor'],
+          'fixedScrap': body['fixedScrap'],
+        }),
+        201,
+        headers: {'content-type': 'application/json'},
+      );
+    }
+
+    if (path.contains('/bill-of-materials/') && request.method == 'PUT') {
+      final body = jsonDecode(request.body) as Map<String, dynamic>;
+      final segments = request.url.pathSegments;
+      final componentId = int.tryParse(segments.last) ?? 2;
+      return http.Response(
+        jsonEncode({
+          'parentArticleId': 1,
+          'parentArticleCode': 'ART001',
+          'parentArticleName': 'T-Shirt Bianca',
+          'componentArticleId': componentId,
+          'componentArticleCode': 'ART002',
+          'componentArticleName': 'Cintura Pelle',
+          'quantity': body['quantity'],
+          'quantityType': body['quantityType'],
+          'umId': body['umId'],
+          'umName': body['umId'] == 2 ? 'Metro' : 'Pezzo',
+          'scrapPercentage': body['scrapPercentage'],
+          'scrapFactor': body['scrapFactor'],
+          'fixedScrap': body['fixedScrap'],
+        }),
+        200,
+        headers: {'content-type': 'application/json'},
+      );
+    }
+
+    if (path.contains('/bill-of-materials/') && request.method == 'DELETE') {
+      return http.Response('', 204);
     }
 
     return http.Response('Not found', 404);

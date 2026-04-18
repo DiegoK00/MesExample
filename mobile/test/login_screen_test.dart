@@ -40,9 +40,9 @@ void main() {
     final router = GoRouter(
       initialLocation: '/login',
       routes: [
-        GoRoute(path: '/login', builder: (_, __) => LoginScreen(area: area)),
-        GoRoute(path: '/home', builder: (_, __) => const Scaffold(body: Text('Home'))),
-        GoRoute(path: '/admin', builder: (_, __) => const Scaffold(body: Text('Admin'))),
+        GoRoute(path: '/login', builder: (_, _) => LoginScreen(area: area)),
+        GoRoute(path: '/home', builder: (_, _) => const Scaffold(body: Text('Home'))),
+        GoRoute(path: '/admin', builder: (_, _) => const Scaffold(body: Text('Admin'))),
       ],
     );
     return MultiProvider(

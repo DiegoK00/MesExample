@@ -8,6 +8,16 @@ class ArticlesService {
 
   ArticlesService(this._auth);
 
+  Future<ArticleResponse> getById(int id) async {
+    final uri = Uri.parse('${ApiConstants.articles}/$id');
+    final response = await _auth.authenticatedGet(uri);
+
+    if (response.statusCode == 200) {
+      return ArticleResponse.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+    }
+    throw Exception('Errore nel caricamento articolo (${response.statusCode})');
+  }
+
   Future<List<ArticleResponse>> getAll({bool? activeOnly}) async {
     final queryParams = {
       if (activeOnly == true) 'activeOnly': 'true',

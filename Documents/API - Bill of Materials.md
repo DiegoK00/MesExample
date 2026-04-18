@@ -183,6 +183,46 @@ Richiesta per aggiornare una relazione BOM (non ha ParentArticleId e ComponentAr
 
 ---
 
+## Testing
+
+### Unit test — `Api_Test/Services/BillOfMaterialServiceTests.cs` ✅
+
+19 test su `BillOfMaterialService` con EF Core InMemory:
+
+| Gruppo | Test | Cosa verifica |
+|--------|------|---------------|
+| GetByParentArticleAsync | 3 | Lista vuota, singolo BOM, ordinamento multipli |
+| GetAsync | 2 | BOM esistente, BOM non trovato |
+| CreateAsync | 7 | Crea valido (PHYSICAL/PERCENTAGE), tutti e tre i campi scarto, auto-referenza, duplicato, padre inesistente, componente inesistente, UM inesistente |
+| UpdateAsync | 4 | Aggiorna quantità+UM+scrap, UM non esistente, QuantityType non valido, BOM non trovato |
+| DeleteAsync | 2 | Elimina esistente, non trovato |
+
+### Controller E2E test — `Api_E2E/BillOfMaterials/BillOfMaterialsE2ETests.cs` ✅
+
+10 test con `WebApplicationFactory` + EF Core InMemory. Il metodo helper `CreateArticleWithUm()` crea categoria, UM e articolo on-the-fly per isolare ogni test.
+
+| Gruppo | Test | Cosa verifica |
+|--------|------|---------------|
+| GET by-parent | 2 | 401 senza token, array vuoto con token |
+| GET singolo | 1 | 404 per relazione inesistente |
+| POST create | 3 | 201 con Location e body corretto, 401 senza token, 409 su duplicato |
+| PUT update | 2 | 200 con dati aggiornati (quantità, tipo, scarto), 404 per relazione inesistente |
+| DELETE | 2 | 204 su eliminazione riuscita, 404 per relazione inesistente |
+
+### Controller Playwright test — `Api_Playwright/BillOfMaterials/BillOfMaterialsPlaywrightTests.cs` ✅
+
+8 test con `IAPIRequestContext` Playwright su Kestrel reale. Usa categoria e UM con `id=1` pre-seeded dalla fixture.
+
+| Gruppo | Test | Cosa verifica |
+|--------|------|---------------|
+| GET by-parent | 1 | 200 con `Content-Type: application/json` e array JSON |
+| GET singolo | 1 | 404 per relazione inesistente |
+| POST create | 2 | 201 con header `location` e body (parentId, componentId, quantity, quantityType, scrapPercentage), 409 con `ProblemDetails` su duplicato |
+| PUT update | 2 | 200 con dati aggiornati, 404 per relazione inesistente |
+| DELETE | 2 | 204 su eliminazione riuscita, 404 per relazione inesistente |
+
+---
+
 ## Nota sulla gestione dello scarto
 
 Lo schema supporta tre modi di gestire lo scarto:

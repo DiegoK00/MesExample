@@ -55,12 +55,15 @@ describe('AdminLayoutComponent', () => {
     expect(mockAuthService.logout).toHaveBeenCalledTimes(1);
   });
 
-  it('contiene i 3 nav items nel sidenav', () => {
+  it('contiene i 6 nav items nel sidenav', () => {
     const component = fixture.componentInstance;
-    expect(component.navItems.length).toBe(3);
+    expect(component.navItems.length).toBe(6);
     const labels = component.navItems.map(i => i.label);
     expect(labels).toContain('Utenti');
     expect(labels).toContain('Programmi');
+    expect(labels).toContain('Articoli');
+    expect(labels).toContain('Categorie');
+    expect(labels).toContain('Unità di Misura');
     expect(labels).toContain('Audit Log');
   });
 });

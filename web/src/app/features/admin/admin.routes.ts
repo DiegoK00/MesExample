@@ -44,7 +44,7 @@ export const ADMIN_ROUTES: Routes = [
         loadComponent: () => import('./articles/articles.component').then(m => m.ArticlesComponent)
       },
       {
-        path: 'articles/:id/bom',
+        path: 'articles/:parentArticleId/bom',
         loadComponent: () => import('./bill-of-materials/bill-of-materials.component').then(m => m.BillOfMaterialsComponent)
       },
       {

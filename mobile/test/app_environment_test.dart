@@ -38,6 +38,10 @@ void main() {
       expect(ApiConstants.users, startsWith(base));
       expect(ApiConstants.programs, startsWith(base));
       expect(ApiConstants.auditLogs, startsWith(base));
+      expect(ApiConstants.articles, startsWith(base));
+      expect(ApiConstants.categories, startsWith(base));
+      expect(ApiConstants.measureUnits, startsWith(base));
+      expect(ApiConstants.billOfMaterials, startsWith(base));
     });
 
     test('path degli endpoint auth sono corretti', () {
@@ -49,6 +53,16 @@ void main() {
     test('path degli endpoint account sono corretti', () {
       expect(ApiConstants.me, endsWith('/account/me'));
       expect(ApiConstants.changePassword, endsWith('/account/password'));
+    });
+
+    test('path degli endpoint BOM sono corretti', () {
+      expect(ApiConstants.billOfMaterials, endsWith('/bill-of-materials'));
+      
+      // Verifica metodi helper per parametri dinamici
+      const parentId = 1;
+      const componentId = 2;
+      expect(ApiConstants.bomByParent(parentId), contains('/bill-of-materials/by-parent/1'));
+      expect(ApiConstants.bomItem(parentId, componentId), contains('/bill-of-materials/1/2'));
     });
   });
 }

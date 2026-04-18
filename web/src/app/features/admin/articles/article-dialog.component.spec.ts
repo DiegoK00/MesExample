@@ -118,7 +118,7 @@ describe('ArticleDialogComponent', () => {
         categoryId: 1,
         price: 19.99,
         umId: 1,
-        um2Id: undefined,
+        um2Id: null,
         measures: 'S/M/L',
         composition: 'Cotton 100%'
       });

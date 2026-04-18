@@ -98,14 +98,17 @@ describe('BillOfMaterialsComponent', () => {
         { provide: BillOfMaterialsService, useValue: bomServiceSpy },
         { provide: ArticlesService, useValue: articlesServiceSpy },
         { provide: MeasureUnitsService, useValue: unitsServiceSpy },
-        { provide: MatDialog, useValue: dialogSpy },
-        { provide: MatSnackBar, useValue: snackBarSpy },
         { provide: Router, useValue: routerSpy }
       ]
-    }).compileComponents();
+    })
+      .overrideProvider(MatDialog, { useValue: dialogSpy })
+      .overrideProvider(MatSnackBar, { useValue: snackBarSpy })
+      .compileComponents();
 
     fixture = TestBed.createComponent(BillOfMaterialsComponent);
+    fixture.componentRef.setInput('parentArticleId', 1);
     component = fixture.componentInstance;
+    fixture.detectChanges();
     compiled = fixture.nativeElement;
   });
 

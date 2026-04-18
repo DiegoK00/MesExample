@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../core/models/article_models.dart';
 import '../../../core/services/articles_service.dart';
@@ -139,6 +140,8 @@ class _AdminArticlesScreenState extends State<AdminArticlesScreen> {
                   if (result == true && mounted) setState(_load);
                 },
                 onDelete: () => _delete(articles[index]),
+                onViewBOM: () =>
+                    context.push('/admin/articles/${articles[index].id}/bom'),
               ),
             );
           },
@@ -154,8 +157,14 @@ class _ArticleCard extends StatelessWidget {
   final ArticleResponse article;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
+  final VoidCallback onViewBOM;
 
-  const _ArticleCard({required this.article, required this.onEdit, required this.onDelete});
+  const _ArticleCard({
+    required this.article,
+    required this.onEdit,
+    required this.onDelete,
+    required this.onViewBOM,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -240,6 +249,11 @@ class _ArticleCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                TextButton.icon(
+                  icon: const Icon(Icons.account_tree_outlined, size: 16),
+                  label: const Text('BOM'),
+                  onPressed: onViewBOM,
+                ),
                 TextButton.icon(
                   icon: const Icon(Icons.edit, size: 16),
                   label: const Text('Modifica'),

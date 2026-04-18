@@ -51,12 +51,14 @@ describe('AppLayoutComponent', () => {
   });
 
   it('mostra "Nessun programma assegnato" quando la lista è vuota', async () => {
-    mockAuthService.currentUser = signal({ ...mockUser, programs: [] });
+    mockAuthService.currentUser.set({ ...mockUser, programs: [] });
     fixture.detectChanges();
     await fixture.whenStable();
     const sidenavText = compiled.querySelector('mat-sidenav')?.textContent ?? '';
     expect(sidenavText).toContain('Nessun programma assegnato');
   });
+
+  afterEach(() => mockAuthService.currentUser.set(mockUser));
 
   it('chiama authService.logout() al click su Esci', () => {
     const component = fixture.componentInstance;

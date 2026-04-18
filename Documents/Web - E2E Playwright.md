@@ -27,6 +27,7 @@ e2e/
 ├── admin-programs.spec.ts      → 4 test — gestione programmi
 ├── admin-audit-logs.spec.ts    → 3 test — audit log
 ├── admin-articles.spec.ts      → 5 test — gestione articoli (CRUD)
+├── admin-bom.spec.ts           → 9 test — bill of materials (CRUD + navigazione)
 ├── admin-categories.spec.ts    → 5 test — gestione categorie (CRUD)
 ├── admin-measure-units.spec.ts → 5 test — gestione unità di misura (CRUD)
 ├── forgot-password.spec.ts     → 6 test — recupero password
@@ -76,7 +77,7 @@ await page.route('**/users**', handler)
 
 ---
 
-## Copertura (82/82 test)
+## Copertura (91/91 test)
 
 ### `auth.spec.ts` (8)
 
@@ -172,6 +173,20 @@ await page.route('**/users**', handler)
 | articles_form: submit invia POST | `capturedMethod === 'POST'` verificato |
 | articles_delete: dialog conferma → DELETE | `capturedMethod === 'DELETE'` verificato |
 
+### `admin-bom.spec.ts` (9)
+
+| Test | Verifica |
+|------|----------|
+| bom_page: colonne Codice/Nome/Quantità/Scarto | Header tabella visibili |
+| bom_page: dati componente + heading con codice padre | Cella ART002, heading contiene ART001 |
+| bom_page: messaggio lista vuota | "Nessun componente trovato" visibile |
+| bom_create: dialog mostra campi form | Heading "Aggiungi Componente", tutti i campi |
+| bom_edit: dialog pre-compilato | Quantità = 2.5, ScrapPercentage = 5 |
+| bom_form_create: submit invia POST | `capturedMethod === 'POST'` verificato |
+| bom_form_edit: submit invia PUT con URL corretto | PUT a `/bill-of-materials/1/2` verificato |
+| bom_delete: conferma → DELETE con URL corretto | DELETE a `/bill-of-materials/1/2` verificato |
+| bom_back: click Indietro → /admin/articles | URL verificato |
+
 ### `admin-categories.spec.ts` (5)
 
 | Test | Verifica |
@@ -234,5 +249,7 @@ await page.route('**/users**', handler)
 - La `TypeScript` compilazione è verificata con `tsc --noEmit` — 0 errori al 2026-04-13
 - **79/82 passano** (3 skipped intenzionali): `retry_logic`, `service_unavailable_503`, `timeout` — funzionalità non implementate nell'app
 - **Bug corretto in `auth.service.ts`**: `logout()` ora chiama `this._token.set(null)` oltre a `clearSession()`, così `isLoggedIn()` torna `false` subito e `LoginComponent.ngOnInit()` non reindirizza a dashboard dopo logout
-- **Pitfall LIFO dei route handler**: `page.route()` è LIFO — i mock registrati dopo prendono priorità. Non chiamare `mockCategories(page)` o `mockArticles(page)` DOPO handler specifici per DELETE nello stesso test
-- **Strict mode e `{ exact: true }`**: `getByText('User')` e `getByLabel('UM')` senza `exact` trovano più elementi → aggiungere `{ exact: true }` per matching preciso o `.first()` quando più match sono accettabili
+- **Pitfall LIFO dei route handler**: `page.route()` è LIFO — i mock registrati dopo prendono priorità. Non chiamare `mockCategories(page)` o `mockArticles(page)` DOPO handler specifici per DELETE nello stesso test. In `admin-bom.spec.ts` i test con handler custom per POST/PUT/DELETE gestiscono anche le GET nella stessa callback (non usare `route.continue()` per le GET — con il server API non attivo la richiesta va alla rete reale e causa timeout)
+- **Strict mode e `{ exact: true }`**: `getByText('User')` e `getByLabel('UM')` senza `exact` trovano più elementi → aggiungere `{ exact: true }` per matching preciso o `.first()` quando più match sono accettabili. In `admin-bom.spec.ts`, `getByLabel('Quantità')` trova anche il select "Tipo Quantità" (sottostringa) → usare `getByRole('spinbutton', { name: 'Quantità' })` per il campo number
+- **Bug corretto: route param BOM** — `admin.routes.ts` usava `:id` mentre il component input si chiama `parentArticleId`. Con `withComponentInputBinding()` il binding è per nome esatto; corretto in `:parentArticleId`
+- **Bug corretto: `@Inject` su property BOM dialog** — `BillOfMaterialDialogComponent` usava `@Inject(MAT_DIALOG_DATA) data!` come decorator su property di classe. Funziona in TestBed ma non nel runtime Angular reale → `data` era undefined → heading vuoto, template crash. Corretto con `data = inject<DialogData>(MAT_DIALOG_DATA)`

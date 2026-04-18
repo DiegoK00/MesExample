@@ -3,10 +3,12 @@
 ## Routes aggiunte (`admin.routes.ts`)
 
 ```
-/admin/articles/:id/bom  → BillOfMaterialsComponent
+/admin/articles/:parentArticleId/bom  → BillOfMaterialsComponent
 ```
 
 Protetta dal guard admin (`adminGuard`).
+
+> **Nota**: Il parametro di rotta deve chiamarsi `:parentArticleId` (non `:id`) per corrispondere all'input signal `parentArticleId = input.required<number>()` del componente. Con `withComponentInputBinding()` il binding avviene per nome esatto — un mismatch causa la mancata ricezione del valore.
 
 ---
 
@@ -45,6 +47,8 @@ Protetta dal guard admin (`adminGuard`).
   bom?: BillOfMaterialResponse;  // Se presente, è edit instead create
 }
 ```
+
+> **Nota**: Il dato di dialogo viene iniettato con `data = inject<DialogData>(MAT_DIALOG_DATA)` (funzione `inject()`). **Non usare** `@Inject(MAT_DIALOG_DATA) data!: DialogData` come property decorator — funziona in TestBed ma non nel runtime Angular reale tramite `MatDialog.open()`, lasciando `data` undefined e causando crash nel template.
 
 **Form fields**:
 - **Articolo Componente** (dropdown) — Lista articoli (esclude padre)
@@ -105,3 +109,18 @@ Aggiunto:
 ## Integrazione nel Layout Admin
 
 Il BOM é accessibile dalla lista articoli tramite il bottone Build nella colonna Actions. Non è necessario aggiungere un nav item separato (viene raggiunto dalla lista articoli).
+
+---
+
+## Test (`bill-of-materials.component.spec.ts`) — 25 test
+
+| Gruppo | Test | Cosa verifica |
+|--------|------|---------------|
+| Component initialization | 3 | creazione componente, caricamento dati all'init, codice articolo padre nell'header |
+| Data loading | 8 | spinner di caricamento, tabella dopo load, 2 righe BOM, codice componente, nome componente, tipo quantità (PHYSICAL/PERCENTAGE), UM, messaggio "Nessun componente trovato" |
+| Scrap display | 3 | scrap percentage (es: "10%"), scrap factor (prefisso "F:"), trattino ("—") quando tutti gli scarti sono 0 |
+| Dialog interactions | 5 | openCreateDialog() apre dialog senza BOM, openEditDialog() apre dialog con BOM, snackbar "Componente aggiunto" dopo create, snackbar "Componente aggiornato" dopo edit, ricarica dati dopo dialog |
+| Delete functionality | 4 | nessuna chiamata senza conferma, delete() dopo conferma, snackbar "Componente eliminato", snackbar di errore da API |
+| Navigation | 1 | goBack() naviga a `/admin/articles` |
+| Error handling | 1 | snackbar "Errore nel caricamento" se forkJoin fallisce |
+| Column structure | 1 | columns = `['componentCode', 'componentName', 'quantity', 'scrap', 'actions']` |

@@ -41,7 +41,7 @@ class _AdminProgramsScreenState extends State<AdminProgramsScreen> {
                   _activeOnly = v;
                   _load();
                 }),
-                activeColor: Colors.white,
+                activeThumbColor: Colors.white,
                 activeTrackColor: Colors.white38,
               ),
             ],
@@ -77,7 +77,7 @@ class _AdminProgramsScreenState extends State<AdminProgramsScreen> {
             return ListView.separated(
               padding: const EdgeInsets.all(16),
               itemCount: programs.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 8),
+              separatorBuilder: (_, _) => const SizedBox(height: 8),
               itemBuilder: (context, index) => _ProgramCard(program: programs[index]),
             );
           },
