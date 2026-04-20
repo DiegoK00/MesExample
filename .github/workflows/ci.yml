@@ -7,6 +7,24 @@ on:
     branches: [main]
 
 jobs:
+  api-build:
+    name: API Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Restore API dependencies
+        run: dotnet restore api/Api.csproj
+
+      - name: Build API
+        run: dotnet build api/Api.csproj --no-restore --configuration Release
+
   api-test:
     name: API Tests
     runs-on: ubuntu-latest
