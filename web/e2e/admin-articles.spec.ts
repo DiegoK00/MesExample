@@ -121,13 +121,11 @@ test('articles_edit: click su edit apre dialog con dati pre-compilati', async ({
 // 4. Compilando il form e cliccando Salva invia POST/PUT
 // ---------------------------------------------------------------------------
 test('articles_form: compilando form e cliccando Salva invia la richiesta', async ({ page }) => {
-  let capturedUrl = '';
   let capturedMethod = '';
 
   await page.route(`${API_BASE}/articles**`, async route => {
     const method = route.request().method();
     if (method !== 'GET') {
-      capturedUrl = route.request().url();
       capturedMethod = method;
       await route.fulfill({
         status: 201,
@@ -244,6 +242,9 @@ test('articles_delete: click delete mostra conferma e invia DELETE', async ({ pa
   await loginAsAdmin(page);
   await page.goto('/admin/articles');
   await page.waitForLoadState('networkidle');
+
+  // Attende che la riga dati sia visibile prima di cercare il pulsante
+  await page.getByRole('cell', { name: 'ART001' }).waitFor();
 
   // Accetta il dialog di conferma nativo (window.confirm)
   page.on('dialog', dialog => dialog.accept());
