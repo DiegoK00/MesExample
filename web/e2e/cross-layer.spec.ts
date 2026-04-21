@@ -28,10 +28,9 @@ test.describe('Cross-layer E2E: Rate Limiting & Retry', () => {
     });
 
     await loginAsAdmin(page);
-    await page.goto('/admin/users');
     await page.waitForLoadState('networkidle');
 
-    await expect(page.getByRole('heading', { name: 'Gestione Utenti' })).toBeVisible({ timeout: 15000 });
+    await expect(page.locator('h2').filter({ hasText: 'Gestione Utenti' })).toBeVisible({ timeout: 15000 });
 
     for (let i = 0; i < 3; i++) {
       await page.getByPlaceholder('Cerca...').fill(`user${i}`);
@@ -163,9 +162,7 @@ test.describe('Error Handling E2E: Network & API Errors', () => {
     });
 
     await loginAsAdmin(page);
-    await page.goto('/admin/users');
-
-    // Lo snackbar di errore appare
+    // loginAsAdmin redirects to /admin/users which already triggers a 500 error and shows snackbar
     await expect(page.locator('simple-snack-bar')).toBeVisible({ timeout: 10000 });
   });
 

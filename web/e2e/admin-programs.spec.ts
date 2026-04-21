@@ -2,6 +2,7 @@ import { test, expect, Page } from '@playwright/test';
 import {
   loginAsAdmin,
   mockPrograms,
+  mockUsers,
   MOCK_PROGRAMS,
   API_BASE,
 } from './helpers';
@@ -11,6 +12,7 @@ import {
 // ---------------------------------------------------------------------------
 async function setupProgramsPage(page: Page): Promise<void> {
   await mockPrograms(page);
+  await mockUsers(page);
   await loginAsAdmin(page);
   await page.goto('/admin/programs');
   await page.waitForLoadState('networkidle');
@@ -72,6 +74,7 @@ test('programs_filter: toggle "solo attivi" filtra la lista', async ({ page }) =
     });
   });
 
+  await mockUsers(page);
   await loginAsAdmin(page);
   await page.goto('/admin/programs');
   await page.waitForLoadState('networkidle');

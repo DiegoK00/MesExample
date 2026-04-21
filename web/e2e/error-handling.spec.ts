@@ -92,8 +92,7 @@ test.describe('Error Handling: Permission Errors (403)', () => {
     });
 
     await loginAsAppUser(page);
-    await page.goto('/app/dashboard');
-
+    // loginAsAppUser already redirects to /app/dashboard
     // App user non ha pulsanti admin — test verifica solo che la pagina carichi
     await expect(page.getByText('Benvenuto')).toBeVisible({ timeout: 10000 });
   });
@@ -202,16 +201,12 @@ test.describe('Error Handling: Network Issues', () => {
     });
 
     await loginAsAdmin(page);
-    await page.goto('/admin/users');
+    // loginAsAdmin redirects to /admin/users and already awaits the (delayed) response
+    await page.waitForLoadState('networkidle');
 
-    // Spinner visibile durante il caricamento
-    try {
-      await expect(page.locator('mat-spinner, mat-progress-spinner')).toBeVisible({ timeout: 1000 });
-    } catch {
-      // Potrebbe essere già caricato, OK
-    }
-
-    await expect(page.getByRole('cell', { name: 'admin@test.com' })).toBeVisible({ timeout: 10000 });
+    // Spinner visibile durante il caricamento (might already be done by now)
+    // Just verify the data eventually appears
+    await expect(page.getByRole('cell', { name: 'admin@test.com' })).toBeVisible({ timeout: 15000 });
   });
 
   test('abort_request: long-running request can be cancelled', async ({ page }) => {

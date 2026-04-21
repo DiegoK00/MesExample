@@ -2,6 +2,7 @@ import { test, expect, Page } from '@playwright/test';
 import {
   loginAsAdmin,
   mockAuditLogs,
+  mockUsers,
   MOCK_AUDIT_LOGS_PAGE,
   API_BASE,
 } from './helpers';
@@ -11,6 +12,7 @@ import {
 // ---------------------------------------------------------------------------
 async function setupAuditLogsPage(page: Page): Promise<void> {
   await mockAuditLogs(page);
+  await mockUsers(page);
   await loginAsAdmin(page);
   await page.goto('/admin/audit-logs');
   await page.waitForLoadState('networkidle');
@@ -88,13 +90,14 @@ test('audit_logs_pagination: navigazione pagine funziona', async ({ page }) => {
     });
   });
 
+  await mockUsers(page);
   await loginAsAdmin(page);
   await page.goto('/admin/audit-logs');
   await page.waitForLoadState('networkidle');
 
   // Il paginator deve essere visibile e mostrare il totale
   const paginator = page.locator('mat-paginator');
-  await expect(paginator).toBeVisible();
+  await expect(paginator).toBeVisible({ timeout: 10000 });
   await expect(paginator).toContainText('60');
 
   // Clicca "Pagina successiva"

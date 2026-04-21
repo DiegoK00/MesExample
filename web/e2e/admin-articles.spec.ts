@@ -1,6 +1,7 @@
 import { test, expect, Page } from '@playwright/test';
 import {
   loginAsAdmin,
+  mockUsers,
   API_BASE,
 } from './helpers';
 
@@ -59,6 +60,7 @@ async function mockArticles(page: Page, data?: any) {
 
 async function setupArticlesPage(page: Page): Promise<void> {
   await mockArticles(page);
+  await mockUsers(page);
   await loginAsAdmin(page);
   await page.goto('/admin/articles');
   await page.waitForLoadState('networkidle');
