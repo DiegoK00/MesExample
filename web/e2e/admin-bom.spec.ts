@@ -1,5 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
-import { loginAsAdmin, API_BASE } from './helpers';
+import { loginAsAdmin, mockUsers, API_BASE } from './helpers';
 
 // ---------------------------------------------------------------------------
 // Mock data
@@ -118,6 +118,7 @@ async function setupBomPage(page: Page, boms = MOCK_BOMS): Promise<void> {
   await mockArticles(page);
   await mockMeasureUnits(page);
   await mockBomList(page, boms);
+  await mockUsers(page);
   await loginAsAdmin(page);
   await page.goto(`/admin/articles/${PARENT_ID}/bom`);
   await page.waitForLoadState('networkidle');

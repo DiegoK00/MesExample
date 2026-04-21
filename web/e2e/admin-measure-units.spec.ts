@@ -1,6 +1,7 @@
 import { test, expect, Page } from '@playwright/test';
 import {
   loginAsAdmin,
+  mockUsers,
   API_BASE,
 } from './helpers';
 
@@ -21,6 +22,7 @@ async function mockMeasureUnits(page: Page, data?: any) {
 
 async function setupMeasureUnitsPage(page: Page): Promise<void> {
   await mockMeasureUnits(page);
+  await mockUsers(page);
   await loginAsAdmin(page);
   await page.goto('/admin/measure-units');
   await page.waitForLoadState('networkidle');
@@ -124,6 +126,7 @@ test('measure_units_delete: click delete mostra conferma e invia DELETE', async 
     }
   });
 
+  await mockUsers(page);
   await loginAsAdmin(page);
   await page.goto('/admin/measure-units');
   await page.waitForLoadState('networkidle');
