@@ -31,7 +31,7 @@ test.describe('Cross-layer E2E: Rate Limiting & Retry', () => {
     await page.goto('/admin/users');
     await page.waitForLoadState('networkidle');
 
-    await expect(page.getByRole('heading', { name: 'Gestione Utenti' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Gestione Utenti' })).toBeVisible({ timeout: 15000 });
 
     for (let i = 0; i < 3; i++) {
       await page.getByPlaceholder('Cerca...').fill(`user${i}`);

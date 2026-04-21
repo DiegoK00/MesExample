@@ -268,16 +268,10 @@ test('bom_form_edit: modificando il form e cliccando Aggiorna invia PUT', async 
 
   await mockArticles(page);
   await mockMeasureUnits(page);
+  await mockBomList(page);
 
-  await page.route(`${API_BASE}/bill-of-materials**`, async route => {
-    const method = route.request().method();
-    if (method === 'GET') {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify(MOCK_BOMS),
-      });
-    } else if (method === 'PUT') {
+  await page.route(`${API_BASE}/bill-of-materials/${PARENT_ID}/${COMPONENT_ID}`, async route => {
+    if (route.request().method() === 'PUT') {
       capturedMethod = 'PUT';
       capturedUrl = route.request().url();
       await route.fulfill({

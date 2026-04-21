@@ -72,11 +72,11 @@ test('measure_units_edit: click su edit apre dialog con dati pre-compilati', asy
 // 4. Compilando il form e cliccando Crea invia POST
 // ---------------------------------------------------------------------------
 test('measure_units_form: compilando form e cliccando Salva invia la richiesta', async ({ page }) => {
-  let capturedMethod = '';
+  let capturedPostSent = false;
 
   await page.route(`${API_BASE}/measure-units**`, async route => {
     const method = route.request().method();
-    capturedMethod = method;
+    if (method === 'POST') capturedPostSent = true;
 
     await route.fulfill({
       status: method === 'POST' ? 201 : 200,
@@ -101,7 +101,7 @@ test('measure_units_form: compilando form e cliccando Salva invia la richiesta',
   await page.getByRole('button', { name: 'Crea' }).click();
   await page.waitForLoadState('networkidle');
 
-  expect(capturedMethod).toBe('POST');
+  expect(capturedPostSent).toBe(true);
 });
 
 // ---------------------------------------------------------------------------

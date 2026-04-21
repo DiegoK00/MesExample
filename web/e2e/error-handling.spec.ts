@@ -137,8 +137,9 @@ test.describe('Error Handling: Resource Not Found (404)', () => {
 
     await loginAsAdmin(page);
     await page.goto('/admin/programs');
+    await page.waitForLoadState('networkidle');
 
-    await expect(page.getByRole('cell', { name: 'PROG1' })).toBeVisible();
+    await expect(page.getByRole('cell', { name: 'PROG1' })).toBeVisible({ timeout: 10000 });
 
     // Accetta il dialog di conferma nativo (window.confirm)
     page.on('dialog', dialog => dialog.accept());

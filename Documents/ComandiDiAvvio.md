@@ -25,7 +25,7 @@ dotnet test
 
 **Steps**:
 1. Apri Debug in VS Code: `Ctrl+Shift+D`
-2. Seleziona **"API — Debug (http://localhost:5260)"**
+2. Seleziona **"API - Debug (.NET)"**
 3. Premi **F5** o clicca ▶ (Start Debugging)
 4. Aggiungi breakpoints nei file `.cs` con un click sul numero di riga
 5. L'API avvia e si ferma ai breakpoint
@@ -60,7 +60,7 @@ npm run e2e:report
 
 ### Debug con Breakpoint (VS Code)
 
-**Prerequisiti**: Estensione **Debugger for Chrome** installata
+**Prerequisiti**: Estensione **JavaScript Debugger** (built-in in VS Code)
 
 **Steps**:
 1. Apri Debug in VS Code: `Ctrl+Shift+D`
@@ -139,7 +139,7 @@ flutter pub run build_runner build --delete-conflicting-outputs
 ### Opzione 1: Da VS Code (Root)
 
 1. Apri Debug in VS Code sulla **cartella principale** (`C:/Personal/Workspace/MesClaude`)
-2. Seleziona **"Full Stack Debug (API + Web + Mobile)"** o **"API + Web"**
+2. Seleziona **"Full Stack (API + Angular)"**
 3. Premi **F5**
 4. Tutti i debugger si avviano in parallelo:
    - API: `localhost:5260` con breakpoints in C#
