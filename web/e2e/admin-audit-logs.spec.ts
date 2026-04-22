@@ -97,7 +97,7 @@ test('audit_logs_pagination: navigazione pagine funziona', async ({ page }) => {
 
   // Il paginator deve essere visibile e mostrare il totale
   const paginator = page.locator('mat-paginator');
-  await expect(paginator).toBeVisible({ timeout: 10000 });
+  await expect(paginator).toBeVisible();
   await expect(paginator).toContainText('60');
 
   // Clicca "Pagina successiva"

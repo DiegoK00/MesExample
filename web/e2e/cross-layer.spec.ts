@@ -30,7 +30,7 @@ test.describe('Cross-layer E2E: Rate Limiting & Retry', () => {
     await loginAsAdmin(page);
     await page.waitForLoadState('networkidle');
 
-    await expect(page.locator('h2').filter({ hasText: 'Gestione Utenti' })).toBeVisible({ timeout: 15000 });
+    await expect(page.locator('h2').filter({ hasText: 'Gestione Utenti' })).toBeVisible();
 
     for (let i = 0; i < 3; i++) {
       await page.getByPlaceholder('Cerca...').fill(`user${i}`);
@@ -72,7 +72,7 @@ test.describe('Cross-layer E2E: Token Refresh', () => {
     await page.getByRole('button', { name: 'Menu' }).click();
     await page.getByText('Esci').click();
 
-    await page.waitForURL('**/admin/login', { timeout: 10000 });
+    await page.waitForURL('**/admin/login');
     await expect(page).toHaveURL(/\/admin\/login/);
   });
 });
@@ -147,9 +147,9 @@ test.describe('Error Handling E2E: Network & API Errors', () => {
 
     // L'app mostra snackbar di errore o spinner
     try {
-      await expect(page.locator('simple-snack-bar')).toBeVisible({ timeout: 5000 });
+      await expect(page.locator('simple-snack-bar')).toBeVisible();
     } catch {
-      await expect(page.getByRole('heading', { name: 'Gestione Utenti' })).toBeVisible({ timeout: 10000 });
+      await expect(page.getByRole('heading', { name: 'Gestione Utenti' })).toBeVisible();
     }
   });
 
@@ -163,7 +163,7 @@ test.describe('Error Handling E2E: Network & API Errors', () => {
 
     await loginAsAdmin(page);
     // loginAsAdmin redirects to /admin/users which already triggers a 500 error and shows snackbar
-    await expect(page.locator('simple-snack-bar')).toBeVisible({ timeout: 10000 });
+    await expect(page.locator('simple-snack-bar')).toBeVisible();
   });
 
   test('api_error_401: unauthorized redirects to login', async ({ page }) => {
@@ -176,7 +176,7 @@ test.describe('Error Handling E2E: Network & API Errors', () => {
     });
 
     await page.goto('/admin/users');
-    await page.waitForURL('**/admin/login', { timeout: 10000 });
+    await page.waitForURL('**/admin/login');
     await expect(page).toHaveURL(/\/admin\/login/);
   });
 
@@ -225,6 +225,6 @@ test.describe('Error Handling E2E: Network & API Errors', () => {
 
     // Errore 409 mostrato nel dialog o come snackbar
     const errorMessage = page.locator('simple-snack-bar').or(page.locator('p.error-message'));
-    await expect(errorMessage.first()).toBeVisible({ timeout: 5000 });
+    await expect(errorMessage.first()).toBeVisible();
   });
 });
