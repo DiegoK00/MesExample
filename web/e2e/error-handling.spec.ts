@@ -22,7 +22,7 @@ test.describe('Error Handling: Invalid Input & Validation', () => {
 
     // Mostra errore di validazione client-side
     const errorText = dialog.locator('.mat-mdc-form-field-error, mat-error');
-    await expect(errorText).toBeVisible({ timeout: 5000 });
+    await expect(errorText).toBeVisible();
   });
 
   test('required_field: form shows errors when submit with empty fields', async ({ page }) => {
@@ -39,7 +39,7 @@ test.describe('Error Handling: Invalid Input & Validation', () => {
 
     // Devono comparire errori di validazione
     const errors = dialog.locator('mat-error');
-    await expect(errors.first()).toBeVisible({ timeout: 5000 });
+    await expect(errors.first()).toBeVisible();
   });
 
   test('password_strength: password fails validation if too weak', async ({ page }) => {
@@ -59,7 +59,7 @@ test.describe('Error Handling: Invalid Input & Validation', () => {
     await passwordField.blur();
 
     const errorText = dialog.locator('mat-error');
-    await expect(errorText).toBeVisible({ timeout: 5000 });
+    await expect(errorText).toBeVisible();
   });
 });
 
@@ -71,7 +71,7 @@ test.describe('Error Handling: Permission Errors (403)', () => {
 
     // Deve reindirizzare all'area app o mostrare accesso negato
     try {
-      await expect(page).toHaveURL(/\/app\//, { timeout: 5000 });
+      await expect(page).toHaveURL(/\/app\//);
     } catch {
       // Oppure mostra messaggio di accesso negato
       const accessDenied = page.locator('body');
@@ -94,7 +94,7 @@ test.describe('Error Handling: Permission Errors (403)', () => {
     await loginAsAppUser(page);
     // loginAsAppUser already redirects to /app/dashboard
     // App user non ha pulsanti admin — test verifica solo che la pagina carichi
-    await expect(page.getByText('Benvenuto')).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText('Benvenuto')).toBeVisible();
   });
 });
 
@@ -138,7 +138,7 @@ test.describe('Error Handling: Resource Not Found (404)', () => {
     await page.goto('/admin/programs');
     await page.waitForLoadState('networkidle');
 
-    await expect(page.getByRole('cell', { name: 'PROG1' })).toBeVisible({ timeout: 10000 });
+    await expect(page.getByRole('cell', { name: 'PROG1' })).toBeVisible();
 
     // Accetta il dialog di conferma nativo (window.confirm)
     page.on('dialog', dialog => dialog.accept());
@@ -164,7 +164,7 @@ test.describe('Error Handling: Server Errors (5xx)', () => {
     await page.goto('/admin/programs');
 
     // L'app mostra snackbar di errore
-    await expect(page.locator('simple-snack-bar')).toBeVisible({ timeout: 10000 });
+    await expect(page.locator('simple-snack-bar')).toBeVisible();
   });
 
   test('service_unavailable_503: app shows retry option on 503', async ({ page }) => {
@@ -206,7 +206,7 @@ test.describe('Error Handling: Network Issues', () => {
 
     // Spinner visibile durante il caricamento (might already be done by now)
     // Just verify the data eventually appears
-    await expect(page.getByRole('cell', { name: 'admin@test.com' })).toBeVisible({ timeout: 15000 });
+    await expect(page.getByRole('cell', { name: 'admin@test.com' })).toBeVisible();
   });
 
   test('abort_request: long-running request can be cancelled', async ({ page }) => {
@@ -222,7 +222,7 @@ test.describe('Error Handling: Network Issues', () => {
     // Naviga altrove
     await page.goto('/admin/programs', { waitUntil: 'networkidle' });
 
-    await expect(page.getByRole('heading', { name: 'Gestione Programmi' })).toBeVisible({ timeout: 10000 });
+    await expect(page.getByRole('heading', { name: 'Gestione Programmi' })).toBeVisible();
   });
 });
 
@@ -266,7 +266,7 @@ test.describe('Error Handling: Form Submission Errors', () => {
 
     // Dovrebbe mostrare errore nel dialog
     const dialog = page.locator('mat-dialog-container');
-    await expect(dialog.locator('p.error-message')).toBeVisible({ timeout: 5000 });
+    await expect(dialog.locator('p.error-message')).toBeVisible();
 
     // Il dialog rimane aperto
     await expect(page.getByRole('heading', { name: 'Nuova Categoria' })).toBeVisible();
@@ -274,6 +274,6 @@ test.describe('Error Handling: Form Submission Errors', () => {
     // Secondo submit (successo)
     await page.getByRole('button', { name: 'Crea' }).click();
     await page.waitForLoadState('networkidle');
-    await expect(page.getByRole('heading', { name: 'Nuova Categoria' })).not.toBeVisible({ timeout: 5000 });
+    await expect(page.getByRole('heading', { name: 'Nuova Categoria' })).not.toBeVisible();
   });
 });

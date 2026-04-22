@@ -93,7 +93,7 @@ test('measure_units_form: compilando form e cliccando Salva invia la richiesta',
 
   await loginAsAdmin(page);
   await page.goto('/admin/measure-units');
-  await expect(page.getByRole('button', { name: 'Nuova UM' })).toBeVisible({ timeout: 15000 });
+  await expect(page.getByRole('button', { name: 'Nuova UM' })).toBeVisible();
 
   await page.getByRole('button', { name: 'Nuova UM' }).click();
 
