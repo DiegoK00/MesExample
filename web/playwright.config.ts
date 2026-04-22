@@ -1,3 +1,5 @@
+/// <reference types="node" />
+
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
@@ -10,6 +12,8 @@ export default defineConfig({
   use: {
     baseURL: 'http://localhost:4200',
     trace: 'on-first-retry',
+    actionTimeout: 60_000,
+    navigationTimeout: 30_000,
   },
   projects: [
     {
