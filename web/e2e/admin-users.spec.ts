@@ -66,7 +66,9 @@ test('users_search: inserendo testo nel campo ricerca filtra la lista', async ({
   await page.waitForLoadState('networkidle');
 
   // Inserisce testo nel campo cerca e preme Cerca
-  await page.getByPlaceholder('Cerca...').fill('admin');
+  // Angular Material strips the native placeholder when mat-label is present;
+  // locate the input via the unique CSS class on the enclosing mat-form-field.
+  await page.locator('.search-field input').fill('admin');
   await page.getByRole('button', { name: 'Cerca' }).click();
   await page.waitForLoadState('networkidle');
 

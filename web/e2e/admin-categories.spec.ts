@@ -38,8 +38,8 @@ async function setupCategoriesPage(page: Page): Promise<void> {
 test('categories_page: mostra la tabella con colonne Nome', async ({ page }) => {
   await setupCategoriesPage(page);
 
+  await expect(page.locator('table')).toBeVisible();
   await expect(page.getByRole('columnheader', { name: 'Nome' })).toBeVisible();
-
   await expect(page.getByRole('cell', { name: 'Categoria 1' })).toBeVisible();
 });
 

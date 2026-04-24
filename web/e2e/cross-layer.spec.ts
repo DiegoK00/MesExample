@@ -33,7 +33,7 @@ test.describe('Cross-layer E2E: Rate Limiting & Retry', () => {
     await expect(page.locator('h2').filter({ hasText: 'Gestione Utenti' })).toBeVisible();
 
     for (let i = 0; i < 3; i++) {
-      await page.getByPlaceholder('Cerca...').fill(`user${i}`);
+      await page.locator('.search-field input').fill(`user${i}`);
       await page.getByRole('button', { name: 'Cerca' }).click();
       await page.waitForLoadState('networkidle');
     }

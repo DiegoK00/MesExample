@@ -29,9 +29,8 @@ test.describe('Error Handling: Invalid Input & Validation', () => {
     await mockUsers(page);
     await loginAsAdmin(page);
     await page.goto('/admin/users');
-    await page.waitForLoadState('networkidle');
 
-    const newUserBtn = page.getByRole('button', { name: 'Nuovo Utente' });
+    const newUserBtn = page.locator('button:has-text("Nuovo Utente")');
     await expect(newUserBtn).toBeVisible({ timeout: 15_000 });
     await newUserBtn.click();
 
