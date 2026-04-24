@@ -52,6 +52,8 @@ import { UserProgramsDialogComponent } from './user-programs-dialog.component';
 
     @if (loading()) {
       <div class="spinner-center"><mat-spinner /></div>
+    } @else if (!(data()?.items?.length)) {
+      <div class="no-data">Nessun utente trovato</div>
     } @else {
       <div class="table-container mat-elevation-z2">
         <table mat-table [dataSource]="data()?.items ?? []">
@@ -118,9 +120,6 @@ import { UserProgramsDialogComponent } from './user-programs-dialog.component';
 
           <tr mat-header-row *matHeaderRowDef="columns"></tr>
           <tr mat-row *matRowDef="let row; columns: columns;"></tr>
-          <tr class="mat-row" *matNoDataRow>
-            <td class="mat-cell no-data" [attr.colspan]="columns.length">Nessun utente trovato</td>
-          </tr>
         </table>
 
         <mat-paginator
