@@ -39,6 +39,8 @@ import { forkJoin } from 'rxjs';
 
     @if (loading()) {
       <div class="spinner-center"><mat-spinner /></div>
+    } @else if (boms().length === 0) {
+      <div class="no-data">Nessun componente trovato</div>
     } @else {
       <div class="table-container mat-elevation-z2">
         <table mat-table [dataSource]="boms()">
@@ -86,9 +88,6 @@ import { forkJoin } from 'rxjs';
 
           <tr mat-header-row *matHeaderRowDef="columns"></tr>
           <tr mat-row *matRowDef="let row; columns: columns;"></tr>
-          <tr class="mat-row" *matNoDataRow>
-            <td class="mat-cell no-data" [attr.colspan]="columns.length">Nessun componente trovato</td>
-          </tr>
         </table>
       </div>
     }

@@ -29,6 +29,8 @@ import { MeasureUnitDialogComponent } from './measure-unit-dialog.component';
 
     @if (loading()) {
       <div class="spinner-center"><mat-spinner /></div>
+    } @else if (units().length === 0) {
+      <div class="no-data">Nessuna unità di misura trovata</div>
     } @else {
       <div class="table-container mat-elevation-z2">
         <table mat-table [dataSource]="units()">
@@ -57,9 +59,6 @@ import { MeasureUnitDialogComponent } from './measure-unit-dialog.component';
 
           <tr mat-header-row *matHeaderRowDef="columns"></tr>
           <tr mat-row *matRowDef="let row; columns: columns;"></tr>
-          <tr class="mat-row" *matNoDataRow>
-            <td class="mat-cell no-data" [attr.colspan]="columns.length">Nessuna unità di misura trovata</td>
-          </tr>
         </table>
       </div>
     }
