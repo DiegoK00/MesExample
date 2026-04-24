@@ -29,8 +29,11 @@ test.describe('Error Handling: Invalid Input & Validation', () => {
     await mockUsers(page);
     await loginAsAdmin(page);
     await page.goto('/admin/users');
+    await page.waitForLoadState('networkidle');
 
-    await page.getByRole('button', { name: 'Nuovo Utente' }).click();
+    const newUserBtn = page.getByRole('button', { name: 'Nuovo Utente' });
+    await expect(newUserBtn).toBeVisible({ timeout: 15_000 });
+    await newUserBtn.click();
 
     const dialog = page.locator('mat-dialog-container');
 
@@ -134,6 +137,7 @@ test.describe('Error Handling: Resource Not Found (404)', () => {
       }
     });
 
+    await mockUsers(page);
     await loginAsAdmin(page);
     await page.goto('/admin/programs');
     await page.waitForLoadState('networkidle');
@@ -254,11 +258,14 @@ test.describe('Error Handling: Form Submission Errors', () => {
       }
     });
 
+    await mockUsers(page);
     await loginAsAdmin(page);
     await page.goto('/admin/categories');
     await page.waitForLoadState('networkidle');
 
-    await page.getByRole('button', { name: 'Nuova Categoria' }).click();
+    const nuovaCatBtn = page.getByRole('button', { name: 'Nuova Categoria' });
+    await expect(nuovaCatBtn).toBeVisible({ timeout: 15_000 });
+    await nuovaCatBtn.click();
 
     // Compila e invia (primo submit: errore 400)
     await page.getByLabel('Nome').fill('Cat');

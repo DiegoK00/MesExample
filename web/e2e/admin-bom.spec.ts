@@ -348,7 +348,9 @@ test('bom_delete: click delete mostra conferma e invia DELETE', async ({ page })
 test('bom_back: click Indietro naviga alla lista articoli', async ({ page }) => {
   await setupBomPage(page);
 
-  await page.getByRole('button', { name: 'Indietro' }).click();
+  const backButton = page.getByRole('button', { name: 'Indietro' });
+  await expect(backButton).toBeVisible({ timeout: 15_000 });
+  await backButton.click();
 
   await expect(page).toHaveURL(/\/admin\/articles$/);
 });

@@ -46,7 +46,9 @@ test('measure_units_page: mostra la tabella con colonne Simbolo/Nome', async ({ 
 test('measure_units_create: aprendo dialog mostra campi Simbolo/Nome', async ({ page }) => {
   await setupMeasureUnitsPage(page);
 
-  await page.getByRole('button', { name: 'Nuova UM' }).click();
+  const newUmButton = page.getByRole('button', { name: 'Nuova UM' });
+  await expect(newUmButton).toBeVisible({ timeout: 15_000 });
+  await newUmButton.click();
 
   await expect(page.getByRole('heading', { name: 'Nuova Unità di Misura' })).toBeVisible();
   await expect(page.getByLabel('Nome')).toBeVisible();

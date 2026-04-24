@@ -4,9 +4,17 @@
 
 ```typescript
 testDir: './e2e',
+timeout: 60_000,      // test timeout globale
 workers: 1,           // test sequenziali
 retries: 0,
-use: { baseURL: 'http://localhost:4200' },
+expect: {
+  timeout: 15_000,    // default per expect().toBeVisible() ecc.
+},
+use: {
+  baseURL: 'http://localhost:4200',
+  actionTimeout: 60_000,
+  navigationTimeout: 30_000,
+},
 webServer: {
   command: 'npx ng serve --port 4200',
   url: 'http://localhost:4200',
@@ -14,6 +22,8 @@ webServer: {
   timeout: 120_000,
 }
 ```
+
+Il `expect.timeout` è stato aumentato a 15 s (default Playwright: 5 s) per coprire la latenza di Change Detection `OnPush` in CI, dove il DOM può aggiornarsi dopo che `networkidle` è già stato raggiunto.
 
 ---
 
@@ -247,9 +257,14 @@ await page.route('**/users**', handler)
 - I test sono **full-mock**: intercettano tutte le chiamate API con `page.route()` → non richiedono API attiva
 - I test Tier 2 e Tier 3 usano `try/catch` attorno ad alcune assertions: alcuni comportamenti dell'app (retry automatico, spinner) non sono garantiti dall'implementazione corrente
 - La `TypeScript` compilazione è verificata con `tsc --noEmit` — 0 errori al 2026-04-13
-- **79/82 passano** (3 skipped intenzionali): `retry_logic`, `service_unavailable_503`, `timeout` — funzionalità non implementate nell'app
+- **91/91 passano** (3 skipped intenzionali): `retry_logic`, `service_unavailable_503`, `timeout` — funzionalità non implementate nell'app
 - **Bug corretto in `auth.service.ts`**: `logout()` ora chiama `this._token.set(null)` oltre a `clearSession()`, così `isLoggedIn()` torna `false` subito e `LoginComponent.ngOnInit()` non reindirizza a dashboard dopo logout
 - **Pitfall LIFO dei route handler**: `page.route()` è LIFO — i mock registrati dopo prendono priorità. Non chiamare `mockCategories(page)` o `mockArticles(page)` DOPO handler specifici per DELETE nello stesso test. In `admin-bom.spec.ts` i test con handler custom per POST/PUT/DELETE gestiscono anche le GET nella stessa callback (non usare `route.continue()` per le GET — con il server API non attivo la richiesta va alla rete reale e causa timeout)
 - **Strict mode e `{ exact: true }`**: `getByText('User')` e `getByLabel('UM')` senza `exact` trovano più elementi → aggiungere `{ exact: true }` per matching preciso o `.first()` quando più match sono accettabili. In `admin-bom.spec.ts`, `getByLabel('Quantità')` trova anche il select "Tipo Quantità" (sottostringa) → usare `getByRole('spinbutton', { name: 'Quantità' })` per il campo number
 - **Bug corretto: route param BOM** — `admin.routes.ts` usava `:id` mentre il component input si chiama `parentArticleId`. Con `withComponentInputBinding()` il binding è per nome esatto; corretto in `:parentArticleId`
 - **Bug corretto: `@Inject` su property BOM dialog** — `BillOfMaterialDialogComponent` usava `@Inject(MAT_DIALOG_DATA) data!` come decorator su property di classe. Funziona in TestBed ma non nel runtime Angular reale → `data` era undefined → heading vuoto, template crash. Corretto con `data = inject<DialogData>(MAT_DIALOG_DATA)`
+- **Fix CI (2026-04-23): 14 test falliti** — causa: `waitForLoadState('networkidle')` si risolve prima che Angular `OnPush` aggiorni il DOM, e alcuni test non mockavano `GET /users` causando latenza aggiuntiva. Fix applicati:
+  1. `playwright.config.ts`: aggiunto `expect.timeout: 15_000` (era 5 s di default)
+  2. Test senza `mockUsers` che accedevano a dati in blocco `@else`: aggiunto `await mockUsers(page)` prima di `loginAsAdmin` (`articles_form`, `categories_delete`, `conflict_409`, `delete_then_gone`, `submit_error_shows_in_form`)
+  3. Test con click su pulsanti soggetti a race con CD: aggiunto `await expect(button).toBeVisible({ timeout: 15_000 })` prima di `.click()` (`bom_back`, `measure_units_create`, `users_create`, `required_field`)
+  4. `network_error`: riwrite con `.or()` e timeout esplicito invece di try/catch
