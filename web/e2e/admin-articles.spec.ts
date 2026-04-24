@@ -176,6 +176,7 @@ test('articles_form: compilando form e cliccando Salva invia la richiesta', asyn
     });
   });
 
+  await mockUsers(page);
   await loginAsAdmin(page);
   await page.goto('/admin/articles');
   await page.waitForLoadState('networkidle');

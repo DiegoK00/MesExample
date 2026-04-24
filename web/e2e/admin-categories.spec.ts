@@ -135,9 +135,13 @@ test('categories_delete: click delete mostra conferma e invia DELETE', async ({ 
     }
   });
 
+  await mockUsers(page);
   await loginAsAdmin(page);
   await page.goto('/admin/categories');
   await page.waitForLoadState('networkidle');
+
+  // Attende che la riga dati sia visibile prima di cercare il pulsante delete
+  await expect(page.getByRole('cell', { name: 'Categoria 1' })).toBeVisible();
 
   // Accetta il dialog di conferma nativo (window.confirm)
   page.on('dialog', dialog => dialog.accept());

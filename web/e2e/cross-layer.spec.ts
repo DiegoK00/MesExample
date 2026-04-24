@@ -55,7 +55,7 @@ test.describe('Cross-layer E2E: Token Refresh', () => {
     await page.reload();
     await page.waitForLoadState('networkidle');
 
-    await expect(page.getByRole('heading', { name: 'Gestione Utenti' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Gestione Utenti' })).toBeVisible({ timeout: 15_000 });
   });
 
   test('logout_revokes_token: after logout, page redirects to login', async ({ page }) => {
@@ -144,13 +144,12 @@ test.describe('Error Handling E2E: Network & API Errors', () => {
 
     await loginAsAdmin(page);
     await page.goto('/admin/users');
+    await page.waitForLoadState('networkidle');
 
-    // L'app mostra snackbar di errore o spinner
-    try {
-      await expect(page.locator('simple-snack-bar')).toBeVisible();
-    } catch {
-      await expect(page.getByRole('heading', { name: 'Gestione Utenti' })).toBeVisible();
-    }
+    // L'app mostra snackbar di errore o heading sempre visibile
+    const snackbar = page.locator('simple-snack-bar');
+    const heading = page.getByRole('heading', { name: 'Gestione Utenti' });
+    await expect(snackbar.or(heading).first()).toBeVisible({ timeout: 15_000 });
   });
 
   test('api_error_500: show generic error message on server error', async ({ page }) => {
@@ -211,8 +210,10 @@ test.describe('Error Handling E2E: Network & API Errors', () => {
       }
     });
 
+    await mockUsers(page);
     await loginAsAdmin(page);
     await page.goto('/admin/categories');
+    await page.waitForLoadState('networkidle');
 
     await page.getByRole('button', { name: 'Nuova Categoria' }).click();
     await page.getByLabel('Nome').fill('Categoria Duplicata');

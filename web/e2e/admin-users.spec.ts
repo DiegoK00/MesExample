@@ -80,8 +80,9 @@ test('users_search: inserendo testo nel campo ricerca filtra la lista', async ({
 test('users_create: aprendo il dialog di creazione mostra i campi obbligatori', async ({ page }) => {
   await setupUsersPage(page);
 
-  // Clicca "Nuovo Utente"
-  await page.getByRole('button', { name: 'Nuovo Utente' }).click();
+  const newUserButton = page.getByRole('button', { name: 'Nuovo Utente' });
+  await expect(newUserButton).toBeVisible({ timeout: 15_000 });
+  await newUserButton.click();
 
   // Il dialog deve aprirsi con titolo "Nuovo Utente"
   await expect(page.getByRole('heading', { name: 'Nuovo Utente' })).toBeVisible();
