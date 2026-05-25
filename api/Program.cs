@@ -3,6 +3,7 @@ using System.Threading.RateLimiting;
 using Api.Data;
 using Api.Middleware;
 using Api.Services;
+using QuestPDF.Infrastructure;
 using Resend;
 using FluentValidation.AspNetCore;
 using FluentValidation;
@@ -11,6 +12,8 @@ using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
+
+QuestPDF.Settings.License = LicenseType.Community;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -110,6 +113,7 @@ builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<MeasureUnitService>();
 builder.Services.AddScoped<ArticleService>();
 builder.Services.AddScoped<BillOfMaterialService>();
+builder.Services.AddScoped<ReportService>();
 
 // Controllers
 builder.Services.AddControllers();

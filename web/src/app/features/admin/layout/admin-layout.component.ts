@@ -132,7 +132,8 @@ export class AdminLayoutComponent {
     { label: 'Articoli', icon: 'inventory_2', route: '/admin/articles' },
     { label: 'Categorie', icon: 'category', route: '/admin/categories' },
     { label: 'Unità di Misura', icon: 'straighten', route: '/admin/measure-units' },
-    { label: 'Audit Log', icon: 'history', route: '/admin/audit-logs' }
+    { label: 'Audit Log', icon: 'history', route: '/admin/audit-logs' },
+    { label: 'Report & KPI', icon: 'bar_chart', route: '/admin/reports' }
   ];
 
   openChangePassword(): void {

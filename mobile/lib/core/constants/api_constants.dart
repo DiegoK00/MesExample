@@ -26,6 +26,11 @@ class ApiConstants {
   static const String billOfMaterials = '$baseUrl/bill-of-materials';
 
   // ── Helper per parametri dinamici ──────────────────────────────────────────
+  // ── Reports ───────────────────────────────────────────────────────────────
+  static const String reportsTopArticles   = '$baseUrl/reports/articles/top-used';
+  static const String reportsProductionKpi = '$baseUrl/reports/production/kpi';
+
+  // ── Helper per parametri dinamici ──────────────────────────────────────────
   static String article(int id) => '$articles/$id';
   static String bomByParent(int parentId) => '$billOfMaterials/by-parent/$parentId';
   static String bomItem(int pId, int cId) => '$billOfMaterials/$pId/$cId';

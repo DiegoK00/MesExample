@@ -11,6 +11,7 @@ import 'core/services/categories_service.dart';
 import 'core/services/measure_units_service.dart';
 import 'core/services/articles_service.dart';
 import 'core/services/bill_of_materials_service.dart';
+import 'core/services/reports_service.dart';
 import 'features/auth/login/login_screen.dart';
 import 'features/auth/forgot_password/forgot_password_screen.dart';
 import 'features/auth/reset_password/reset_password_screen.dart';
@@ -25,6 +26,7 @@ import 'features/admin/categories/admin_categories_screen.dart';
 import 'features/admin/measure_units/admin_measure_units_screen.dart';
 import 'features/admin/articles/admin_articles_screen.dart';
 import 'features/admin/articles/admin_article_bom_screen.dart';
+import 'features/admin/reports/admin_reports_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -59,6 +61,7 @@ class _MyAppState extends State<MyApp> {
   late final MeasureUnitsService _measureUnitsService;
   late final ArticlesService _articlesService;
   late final BillOfMaterialsService _billOfMaterialsService;
+  late final ReportsService _reportsService;
   final _messengerKey = GlobalKey<ScaffoldMessengerState>();
 
   @override
@@ -71,6 +74,7 @@ class _MyAppState extends State<MyApp> {
     _measureUnitsService = MeasureUnitsService(widget.auth);
     _articlesService = ArticlesService(widget.auth);
     _billOfMaterialsService = BillOfMaterialsService(widget.auth);
+    _reportsService = ReportsService(widget.auth);
 
     // Rebuild when theme changes so MaterialApp.router gets the new themeMode.
     widget.prefs.addListener(() => setState(() {}));
@@ -134,6 +138,10 @@ class _MyAppState extends State<MyApp> {
         GoRoute(
           path: '/admin/audit-logs',
           builder: (_, _) => const AdminAuditLogsScreen(),
+        ),
+        GoRoute(
+          path: '/admin/reports',
+          builder: (_, _) => const AdminReportsScreen(),
         ),
         GoRoute(
           path: '/change-password',
@@ -233,6 +241,7 @@ class _MyAppState extends State<MyApp> {
         Provider.value(value: _measureUnitsService),
         Provider.value(value: _articlesService),
         Provider.value(value: _billOfMaterialsService),
+        Provider.value(value: _reportsService),
       ],
       child: MaterialApp.router(
         title: 'MesClaude',

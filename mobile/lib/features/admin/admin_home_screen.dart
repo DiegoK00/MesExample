@@ -104,6 +104,14 @@ class AdminHomeScreen extends StatelessWidget {
               color: Colors.orange,
               onTap: () => context.go('/admin/audit-logs'),
             ),
+            const SizedBox(height: 12),
+            _NavCard(
+              icon: Icons.bar_chart,
+              title: 'Report & KPI',
+              subtitle: 'Articoli più richiesti e KPI di produzione',
+              color: Colors.deepPurple,
+              onTap: () => context.go('/admin/reports'),
+            ),
             const SizedBox(height: 32),
             Text(
               'Account',
