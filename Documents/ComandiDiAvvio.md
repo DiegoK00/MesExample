@@ -84,7 +84,7 @@ cd C:/Personal/Workspace/MesClaude/mobile
 
 # Installazione dipendenze
 flutter pub get
-flutter pub run build_runner build --delete-conflicting-outputs
+dart run build_runner build --delete-conflicting-outputs
 
 # Avvio DEV — Android emulator CON DEBUG
 flutter run --dart-define-from-file=config/env.dev.android.json
@@ -95,8 +95,10 @@ flutter run --dart-define-from-file=config/env.dev.ios.json
 # Avvio senza file (usa default: Android emulator http://10.0.2.2:5260)
 flutter run
 
-# Build RELEASE produzione
+# Build RELEASE Android (Windows / macOS / Linux)
 flutter build apk --dart-define-from-file=config/env.prod.json
+
+# Build RELEASE iOS — solo macOS con Xcode installato
 flutter build ipa --dart-define-from-file=config/env.prod.json
 
 # Test unitari e widget
@@ -106,7 +108,7 @@ flutter test
 flutter test integration_test/app_test.dart
 
 # Rigenera i mock mockito (dopo modifiche a @GenerateMocks)
-flutter pub run build_runner build --delete-conflicting-outputs
+dart run build_runner build --delete-conflicting-outputs
 ```
 
 ### Debug con Breakpoint (VS Code)
