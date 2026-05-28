@@ -1,0 +1,140 @@
+workflows:
+
+  # ── iOS Release (IPA) ────────────────────────────────────────────────────────
+  flutter-ios-release:
+    name: Flutter iOS Release
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: main
+          include: true
+
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+      vars:
+        # Imposta questi valori nel Codemagic dashboard → Environment variables
+        # API_BASE_URL: https://api.mesclaude.com
+        BUNDLE_ID: com.mesclaude.app
+      ios_signing:
+        distribution_type: app_store   # oppure: ad_hoc, development
+        bundle_identifier: $BUNDLE_ID
+        # App Store Connect API key configurata nel Codemagic dashboard
+        # (Team > Integrations > Developer Portal)
+
+    scripts:
+      - name: Install Flutter dependencies
+        script: |
+          cd mobile
+          flutter pub get
+
+      - name: Run tests
+        script: |
+          cd mobile
+          flutter test
+
+      - name: Build iOS release
+        script: |
+          cd mobile
+          flutter build ipa \
+            --release \
+            --dart-define=API_BASE_URL=$API_BASE_URL \
+            --export-options-plist=/Users/builder/export_options.plist
+
+    artifacts:
+      - mobile/build/ios/ipa/*.ipa
+
+    publishing:
+      app_store_connect:
+        # Carica automaticamente su TestFlight dopo il build
+        auth: integration
+        submit_to_testflight: true
+
+
+  # ── Android Release (APK / AAB) ──────────────────────────────────────────────
+  flutter-android-release:
+    name: Flutter Android Release
+    max_build_duration: 45
+    instance_type: mac_mini_m2
+
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: main
+          include: true
+
+    environment:
+      flutter: stable
+      vars:
+        # Imposta questi valori nel Codemagic dashboard → Environment variables
+        # API_BASE_URL: https://api.mesclaude.com
+        PACKAGE_NAME: com.mesclaude.app
+      android_signing:
+        - mesclaude_keystore   # nome del keystore caricato nel Codemagic dashboard
+
+    scripts:
+      - name: Install Flutter dependencies
+        script: |
+          cd mobile
+          flutter pub get
+
+      - name: Run tests
+        script: |
+          cd mobile
+          flutter test
+
+      - name: Build Android App Bundle (release)
+        script: |
+          cd mobile
+          flutter build appbundle \
+            --release \
+            --dart-define=API_BASE_URL=$API_BASE_URL
+
+    artifacts:
+      - mobile/build/app/outputs/bundle/release/*.aab
+
+    publishing:
+      google_play:
+        # Carica automaticamente su Google Play (Internal Testing)
+        credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
+        track: internal
+        submit_as_draft: true
+
+
+  # ── Flutter Test only (PR check) ─────────────────────────────────────────────
+  flutter-test:
+    name: Flutter Tests
+    max_build_duration: 20
+    instance_type: linux_x2
+
+    triggering:
+      events:
+        - pull_request
+      branch_patterns:
+        - pattern: main
+          include: true
+
+    environment:
+      flutter: stable
+
+    scripts:
+      - name: Install dependencies
+        script: |
+          cd mobile
+          flutter pub get
+
+      - name: Analyze
+        script: |
+          cd mobile
+          flutter analyze
+
+      - name: Test
+        script: |
+          cd mobile
+          flutter test
